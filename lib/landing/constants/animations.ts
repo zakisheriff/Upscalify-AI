@@ -24,3 +24,4 @@ export const ANIM_22 = { duration: 300, delay: 100 };
 export const ANIM_23 = { duration: 400, delay: 200 };
 export const ANIM_24 = { duration: 500, delay: 000 };
 export const ANIM_25 = { duration: 100, delay: 100 };
+export const ANIM_26 = { duration: 200, delay: 200 };
