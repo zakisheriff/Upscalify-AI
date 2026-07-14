@@ -1,0 +1,29 @@
+{
+  "name": "upscalify-desktop",
+  "version": "0.1.0",
+  "description": "Upscalify — a free, on-device AI image upscaler (real Real-ESRGAN).",
+  "author": "Zaki Sheriff",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "electron": "^33.0.0",
+    "electron-builder": "^25.1.8"
+  },
+  "build": {
+    "appId": "lk.theatom.upscalify",
+    "productName": "Upscalify",
+    "files": ["main.js", "preload.js", "engine.js", "upscale.js", "renderer/**/*"],
+    "mac": {
+      "category": "public.app-category.photography",
+      "target": ["dmg"]
+    },
+    "dmg": {
+      "title": "Upscalify"
+    }
+  }
+}

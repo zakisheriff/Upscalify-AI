@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Upscalify</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="titlebar"></div>
+
+    <!-- First-run engine setup -->
+    <section id="setup" class="screen hidden">
+      <div class="setup-card">
+        <h1 class="wordmark">Upscalify<span>ai</span></h1>
+        <p class="muted">Setting up the upscaling engine — a one-time ~9&nbsp;MB download.</p>
+        <div class="bar"><div id="setup-bar" class="bar__fill"></div></div>
+        <p id="setup-status" class="muted small">Starting…</p>
+      </div>
+    </section>
+
+    <!-- Main -->
+    <main id="app" class="screen hidden">
+      <header class="topbar">
+        <h1 class="wordmark small">Upscalify<span>ai</span></h1>
+        <div class="pills" id="pills">
+          <button class="pill is-active" data-quality="fast">Fast · 2×</button>
+          <button class="pill" data-quality="high">High quality · 4×</button>
+        </div>
+      </header>
+
+      <!-- Dropzone -->
+      <section id="dropzone" class="dropzone">
+        <div class="dropzone__inner">
+          <div class="glyph">＋</div>
+          <p class="drop-title">Drop an image here</p>
+          <p class="muted small">or <button id="browse" class="link">browse your files</button></p>
+          <p class="muted small">JPG · PNG · WEBP · BMP · TIFF</p>
+        </div>
+      </section>
+
+      <!-- Working / result -->
+      <section id="stage" class="stage hidden">
+        <div class="compare" id="compare">
+          <img id="img-after" class="compare__img" alt="Upscaled result" />
+          <div class="compare__before" id="clip">
+            <img id="img-before" class="compare__img" alt="Original" />
+          </div>
+          <div class="compare__handle" id="handle"><span></span></div>
+          <div class="compare__tag compare__tag--before">Before</div>
+          <div class="compare__tag compare__tag--after">After</div>
+        </div>
+
+        <div id="progress" class="progress hidden">
+          <div class="bar"><div id="work-bar" class="bar__fill"></div></div>
+          <p id="work-status" class="muted small">Reconstructing…</p>
+        </div>
+
+        <div class="actions">
+          <p id="meta" class="muted small"></p>
+          <div class="actions__buttons">
+            <button id="reset" class="btn btn--ghost">New image</button>
+            <button id="save" class="btn" disabled>Save image</button>
+          </div>
+        </div>
+      </section>
+
+      <footer class="foot muted small">Runs on your machine. Nothing leaves it.</footer>
+    </main>
+
+    <script src="renderer.js"></script>
+  </body>
+</html>
