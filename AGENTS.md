@@ -58,10 +58,12 @@ public/
 
 ## Built vs stubbed
 
-- **Fully working**: image upscaling (sharp), video upscaling with preserved
-  audio and real progress (ffmpeg), upload → progress → compare → download,
-  before/after slider, error handling, all SEO/AEO files. Verified end-to-end
-  against the running server.
+- **Fully working**: image upscaling via **real Real-ESRGAN** (`realesrgan.ts`,
+  reusing an installed Upscayl engine + models — same quality as Upscayl), with
+  a sharp fallback if no engine is present; video upscaling with preserved audio
+  and real progress (ffmpeg); upload → progress → compare → download; before/
+  after slider; error handling; all SEO/AEO files. Verified end-to-end on a
+  noisy real photo — output matches Upscayl.
 - **Present but inactive by default**: the remote model-server client
   (`remote-image.ts`). It activates only when `INFERENCE_URL` is set. There is
   no Real-ESRGAN/SeedVR2 server bundled — the local fallback stands in for the

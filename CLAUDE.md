@@ -36,12 +36,19 @@ types.ts`), selected in `lib/inference/backend.ts`:
 - If `INFERENCE_URL` is set, calls route to a model server (Real-ESRGAN for the
   fast path, SeedVR2 for the high-quality path) via `remote-image.ts`. This is
   the exact seam a cloud deployment reuses.
-- Otherwise a **deterministic local fallback** runs so the product works with
-  nothing else installed:
-  - Images → `local-image.ts` (sharp: Lanczos resample + denoise + unsharp).
+- Otherwise the local backend runs on-device:
+  - Images → `local-image.ts`. Preferred engine is **real Real-ESRGAN** (the
+    NCNN/Vulkan binary + weights, `realesrgan.ts`), which denoises and
+    reconstructs — output matches Upscayl because it is the same model. It
+    locates an existing install (Upscayl's bundle, or `REALESRGAN_BIN` /
+    `REALESRGAN_MODELS`); we do not redistribute the binary. If no engine is
+    found, it falls back to a sharp Lanczos+denoise pass that keeps the app
+    working but looks softer/grainier on rough sources. `fast` → lite model @2×,
+    `high` → standard model @4×.
   - Video → `local-video.ts` (ffmpeg: single deterministic filtergraph so
     motion stays temporally stable; original audio copied through; real
-    progress parsed from ffmpeg `-progress`).
+    progress from ffmpeg `-progress`). Video still uses the ffmpeg scaler, not
+    the model — a frame-by-frame Real-ESRGAN video path is deferred.
 
 Swapping the local fallback for the model server is a change to `backend.ts` and
 the `remote-*` client only. `scale.ts` is the single place quality maps to a
