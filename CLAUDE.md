@@ -12,10 +12,11 @@ picking the project up cold (file map, built vs stubbed, deferred work).
 
 ## Product shape
 
-The marketing surface and the tool are the same page. You scroll from the
-reconstruction thesis (the hero) straight into uploading a real file. v1 does
-one thing well: upload → reconstruct with real progress → compare before/after →
-download. No auth, no billing, no queue, no cloud storage.
+**One page, nothing else.** No navbar, no hero, no marketing sections, no
+footer chrome. A centered title, one upload bar, two quality pills, and the
+result appears in place. v1 does one thing well: drop a file → reconstruct with
+real progress → compare before/after → download. No auth, no billing, no queue,
+no cloud storage.
 
 Two quality paths are exposed by outcome, never by model name:
 - **Fast** — roughly 2×, returns in seconds.
@@ -58,36 +59,33 @@ appropriate for a single local user, replaced by a real store in the cloud phase
 
 ## Design system
 
-Concept: *latent detail resolving out of degradation* — a cool, muddy "before"
-vs a warm, clear "after". That tension drives everything.
+Deliberately minimal and light, modelled on a clean utility page (think a tidy
+search/lookup tool): white background, one blue accent, soft shadows, rounded
+pills. The product is the tool, not a landing page.
 
 - Tokens live once in `app/globals.css` (`:root`), referenced everywhere.
   Component styles in `app/components.css`. Vanilla CSS only — no Tailwind, no
-  CSS-in-JS. No magic values in components.
-- Palette: graphite base (`--ink`), amber "clarity" accent (`--focus`). Chosen
-  against the three AI defaults (not cream/terracotta, not acid-green-on-black,
-  not broadsheet).
-- Type: **Fraunces** (variable, optical-size axis — headlines literally sharpen
-  in the hero via its `opsz`/`SOFT` axes), **IBM Plex Sans** body, **IBM Plex
-  Mono** for real figures (resolutions, %, sizes).
-- Signature: the **reconstruction front** — a sweeping seam with blocky/cool on
-  one side and sharp/warm on the other. One idea, three uses: ambient in the
-  hero (`ReconstructionFront.tsx`), interactive in the compare view
-  (`CompareView.tsx`), and a quiet scroll echo (`Reveal.tsx`).
+  CSS-in-JS. No magic values in components. (Both files are imported in
+  `layout.tsx` — keep the `components.css` import; dropping it silently unstyles
+  the app.)
+- Palette: white (`--bg`), near-black ink, a single blue accent (`--accent
+  #2f6bff`) with a soft tint (`--accent-soft`).
+- Type: **system / Apple fonts first** (`-apple-system, Helvetica Neue`) with
+  **Inter** as the cross-platform fallback (`--font-ui`). One script accent font,
+  **Caveat**, used only for the "ai" in the title.
+- The only visual flourish is the before/after compare slider (`CompareView.tsx`)
+  and the bold + script title. Everything else is quiet.
 
-## Animation division of labor (strict)
-
-Never let GSAP and Framer Motion animate the same property on the same element.
-- **GSAP** owns: hero load sequence (`Hero.tsx`), the reconstruction-front
-  canvas sweep, and scroll-triggered reveals (`Reveal.tsx`).
-- **Framer Motion** owns: studio panel mount/unmount transitions (`Studio.tsx`).
-These never touch the same element, so there is no transform conflict.
+Note: GSAP and Framer Motion are installed but no longer used in the UI (the
+dark editorial hero/scroll build was removed). Leave them out of new UI unless
+there's a real need; if reintroduced, never let both animate the same property
+on the same element.
 
 ## Conventions
 
-- Sentence case throughout. No emojis, no decorative icons or arrows, no
-  eyebrows/labels above headings, no bright gradients, prose over lists.
-- All text inputs are ≥16px (prevents iOS Safari zoom).
+- Sentence case throughout. No emojis, no decorative arrows. Icons only when
+  functional (the photo glyph in the bar, the grip on the compare handle).
+- All text inputs / the body are ≥16px (prevents iOS Safari zoom).
 - Semantic HTML, landmarks, alt text, visible focus, reduced-motion respected.
 - SEO/AEO/GEO: per-page metadata + OG/Twitter in `layout.tsx`/page metadata,
   JSON-LD in `components/StructuredData.tsx` (WebApplication + Organization +

@@ -97,7 +97,11 @@ export function CompareView({ kind, beforeUrl, afterUrl }: Props) {
           tabIndex={0}
           onKeyDown={onKey}
         >
-          <span className="compare__handle" aria-hidden="true" />
+          <span className="compare__handle" aria-hidden="true">
+            <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round">
+              <path d="M5 3v8M9 3v8" />
+            </svg>
+          </span>
         </div>
       </div>
     </div>

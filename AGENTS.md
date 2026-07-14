@@ -8,8 +8,8 @@ project from scratch. `CLAUDE.md` holds the same context with more of the "why".
 
 An image and video upscaler from The Atom. Upload a low-res file, reconstruct a
 sharper higher-res version, compare before/after, download. v1 runs entirely on
-the local machine. Next.js (App Router) + TypeScript, vanilla CSS, GSAP + Framer
-Motion.
+the local machine. Next.js (App Router) + TypeScript, vanilla CSS. The UI is a
+single minimal light page — no navbar, hero, sections, or footer.
 
 ## The one seam that matters
 
@@ -23,11 +23,11 @@ UI code learn where inference runs. Server-side, `lib/inference/backend.ts` →
 
 ```
 app/
-  layout.tsx            fonts (Fraunces/Plex Sans/Plex Mono), full metadata, JSON-LD mount
-  globals.css           design tokens (:root) + primitives — edit tokens here, not components
+  layout.tsx            fonts (Inter + Caveat, system-first), metadata, JSON-LD mount.
+                        Imports BOTH globals.css and components.css — keep both.
+  globals.css           design tokens (:root) + base — edit tokens here, not components
   components.css        all component styles, token-referenced
-  page.tsx              landing + tool: hero, studio band, how, quality, faq
-  about/page.tsx        what/who/how — brand + founder attribution
+  page.tsx              the single page: title + <Studio /> + footnote. Nothing else.
   sitemap.ts, robots.ts SEO route handlers
   api/
     upscale/route.ts    POST file+quality -> {jobId,kind}; kicks off async backend run
@@ -35,12 +35,9 @@ app/
     result/[id]/route.ts GET reconstructed output (?download=1 forces attachment)
     source/[id]/route.ts GET original upload, for the before/after view
 components/
-  Hero.tsx              GSAP load timeline; headline "sharpens" via Fraunces opsz
-  ReconstructionFront.tsx  signature canvas: sweeping resolve front (skyline scene)
+  Studio.tsx            the whole tool: bar + pills + working + done/error states
   CompareView.tsx       draggable before/after; image + synced video; keyboard accessible
-  Studio.tsx            the tool state machine (idle→working→done/error); Framer Motion panels
-  Reveal.tsx            GSAP ScrollTrigger reveal wrapper
-  Header.tsx Footer.tsx StructuredData.tsx
+  StructuredData.tsx    JSON-LD (invisible; SEO/AEO)
 lib/
   upscale.ts            client seam (the public interface)
   inference/
@@ -87,10 +84,11 @@ public/
 
 ## House rules (enforced)
 
-Sentence case; no emojis, decorative icons, arrows, eyebrows, bright gradients,
-or filler lists. Inputs ≥16px. Reduced motion respected. GSAP and Framer Motion
-never animate the same element. Commit + push after every meaningful change with
-lowercase conventional messages and no attribution lines.
+Keep it minimal: one light page, white background, single blue accent, system/
+Apple fonts (Inter fallback). Sentence case; no emojis or decorative arrows;
+icons only when functional. Body/inputs ≥16px. Reduced motion respected. Commit
++ push after every meaningful change with lowercase conventional messages and no
+attribution lines.
 
 <!-- BEGIN:nextjs-agent-rules -->
 # This is NOT the Next.js you know
