@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Inter, Caveat } from "next/font/google";
+import { Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 import "./components.css";
 import { StructuredData } from "@/components/StructuredData";
@@ -11,11 +12,10 @@ const inter = Inter({
   display: "swap",
 });
 
-// One characterful script, used only for the accent word in the title.
-const caveat = Caveat({
-  variable: "--font-script",
-  subsets: ["latin"],
-  weight: ["600", "700"],
+// Ndot55 — Nothing's dot-matrix typeface, used for the wordmark.
+const ndot = localFont({
+  src: "./fonts/Ndot55-Regular.otf",
+  variable: "--font-dot",
   display: "swap",
 });
 
@@ -53,7 +53,7 @@ export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${inter.variable} ${caveat.variable}`}>
+    <html lang="en" className={`${inter.variable} ${ndot.variable}`}>
       <body>
         {children}
         <StructuredData />
