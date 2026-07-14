@@ -33,14 +33,39 @@ async function boot() {
   });
   try {
     await window.api.installEngine();
-    show("app");
+    await showWelcome(); // first-run greeting, then Get started → app
   } catch (err) {
     $("setup-status").textContent = `Setup failed: ${err.message}. Check your connection and reopen.`;
   }
 }
 
+// Apple-style handwritten hello: greetings drawn on left-to-right, then a
+// "Welcome to Upscalify" with a Get started button.
+const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+
+async function showWelcome() {
+  show("welcome");
+  const el = $("hello");
+  const greetings = ["hello", "hola", "bonjour", "ciao", "olá", "hallo"];
+  for (let i = 0; i < greetings.length; i++) {
+    el.textContent = greetings[i];
+    el.classList.remove("is-in", "is-out");
+    void el.offsetWidth; // restart the animation
+    el.classList.add("is-in");
+    await wait(1050);
+    if (i < greetings.length - 1) {
+      el.classList.remove("is-in");
+      el.classList.add("is-out");
+      await wait(340);
+    }
+  }
+  $("welcome-end").classList.add("show"); // final greeting stays; reveal CTA
+}
+
+$("welcome-go").addEventListener("click", () => show("app"));
+
 function show(which) {
-  for (const s of ["setup", "app"]) $(s).classList.toggle("hidden", s !== which);
+  for (const s of ["setup", "welcome", "app"]) $(s).classList.toggle("hidden", s !== which);
 }
 
 // --- download detail formatting --------------------------------------------
