@@ -47,6 +47,12 @@ button, .link { -webkit-app-region: no-drag; }
 
 .screen { padding: 0 28px 24px; }
 
+/* Center the whole app vertically in the window */
+#app {
+  min-height: calc(100vh - 28px - 24px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+
 /* Wordmark — Nothing Ndot55 dot-matrix */
 .wordmark {
   margin: 0;
@@ -67,7 +73,7 @@ button, .link { -webkit-app-region: no-drag; }
 
 /* Topbar */
 .topbar {
-  display: flex; align-items: center; justify-content: space-between;
+  display: flex; align-items: center; justify-content: center;
   padding: 4px 0 20px;
 }
 .pills { display: flex; gap: 8px; justify-content: center; margin-top: 16px; }
@@ -81,7 +87,7 @@ button, .link { -webkit-app-region: no-drag; }
 
 /* Dropzone */
 .dropzone {
-  border: 2px dashed var(--border-strong); border-radius: var(--radius);
+  border: 2px dashed var(--border-strong); border-radius: 30px;
   background: var(--panel); cursor: pointer;
   min-height: 340px; display: flex; align-items: center; justify-content: center;
   transition: border-color 0.15s, background 0.15s;
