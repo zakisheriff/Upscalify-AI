@@ -78,7 +78,7 @@ export function Landing() {
     <div ref={rootRef}>
       <header className="top" ref={topRef}>
         <div className="wrap top__inner">
-          <a className="brand" href="/">Upscalify</a>
+          <a className="brand" href="/">Upscalify ai</a>
           <nav className="top__links">
             <a className="top__link" href="#what">What it does</a>
             <a className="top__link" href="#install">Install</a>
@@ -91,15 +91,8 @@ export function Landing() {
       <main>
         <section className="hero">
           <div className="wrap">
-            <motion.h1 className="hero__mark" custom={0} variants={item} initial="hidden" animate="show">
-              Upscalify ai
-            </motion.h1>
-            <motion.p className="hero__head" custom={1} variants={item} initial="hidden" animate="show">
+            <motion.p className="hero__mark" custom={1} variants={item} initial="hidden" animate="show">
               Sharper images and video, right on your Mac.
-            </motion.p>
-            <motion.p className="hero__sub" custom={2} variants={item} initial="hidden" animate="show">
-              A free, on-device upscaler that rebuilds real detail. It installs like any Mac app and
-              runs entirely on your machine, so nothing you open ever leaves it.
             </motion.p>
             <motion.div className="hero__cta" custom={3} variants={item} initial="hidden" animate="show">
               <a className="btn btn--primary" href={RELEASES}>Download for Mac</a>
@@ -180,7 +173,7 @@ export function Landing() {
 
         <footer className="foot">
           <div className="wrap foot__inner">
-            <span>An upscaler from <a href="https://theatom.lk" rel="noopener">The Atom</a>.</span>
+            <span>Upscalify AI by <a href="https://theatom.lk" rel="noopener">The Atom</a>.</span>
             <span className="foot__links">
               <a href={REPO} rel="noopener">GitHub</a>
               <a href={RELEASES} rel="noopener">Download</a>

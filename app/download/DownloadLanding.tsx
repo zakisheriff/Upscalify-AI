@@ -190,7 +190,7 @@ export function DownloadLanding() {
 
         <footer className="dl-foot">
           <div className="dl-wrap dl-foot__inner">
-            <span>An upscaler from <a href="https://theatom.lk" rel="noopener">The Atom</a>.</span>
+            <span>Upscalify by <a href="https://theatom.lk" rel="noopener">The Atom</a>.</span>
             <span className="dl-foot__links">
               <a href={REPO} rel="noopener">GitHub</a>
               <a href="/">Web version</a>

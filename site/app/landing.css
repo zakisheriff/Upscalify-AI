@@ -44,7 +44,13 @@
 .btn--sm { padding: 10px 18px; font-size: 15px; }
 
 /* ---- hero ---- */
-.hero { padding: 104px 0 76px; text-align: center; }
+.hero {
+  min-height: calc(100dvh - 64px); /* full first screen, minus the sticky top bar */
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: 40px 0;
+  text-align: center;
+}
+.hero .wrap { width: 100%; }
 .hero__mark {
   font-family: var(--font-dot), var(--font);
   text-transform: uppercase;

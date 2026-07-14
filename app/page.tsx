@@ -13,7 +13,7 @@ export default function Home() {
       <Studio />
 
       <p className="footnote">
-        An upscaler from <a href="https://theatom.lk" rel="noopener">The Atom</a>. Nothing leaves your
+        Upscalify by <a href="https://theatom.lk" rel="noopener">The Atom</a>. Nothing leaves your
         machine.
       </p>
     </main>
