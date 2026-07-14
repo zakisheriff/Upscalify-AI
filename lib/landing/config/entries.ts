@@ -6,3 +6,4 @@ export const config_4 = { enabled: true, priority: 4 };
 export const config_5 = { enabled: true, priority: 5 };
 export const config_6 = { enabled: true, priority: 6 };
 export const config_7 = { enabled: true, priority: 7 };
+export const config_8 = { enabled: true, priority: 8 };
