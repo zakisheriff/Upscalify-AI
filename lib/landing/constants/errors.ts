@@ -23,3 +23,4 @@ export const ERROR_21 = 'Error 21: something went wrong at step 21';
 export const ERROR_22 = 'Error 22: something went wrong at step 22';
 export const ERROR_23 = 'Error 23: something went wrong at step 23';
 export const ERROR_24 = 'Error 24: something went wrong at step 24';
+export const ERROR_25 = 'Error 25: something went wrong at step 25';
