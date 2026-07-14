@@ -36,3 +36,4 @@ export const ERROR_34 = 'Error 34: something went wrong at step 34';
 export const ERROR_35 = 'Error 35: something went wrong at step 35';
 export const ERROR_36 = 'Error 36: something went wrong at step 36';
 export const ERROR_37 = 'Error 37: something went wrong at step 37';
+export const ERROR_38 = 'Error 38: something went wrong at step 38';
