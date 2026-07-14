@@ -36,7 +36,10 @@ function run(engine, input, output, quality, onPercent) {
       const matches = text.match(/(\d+(?:\.\d+)?)%/g);
       if (matches && onPercent) {
         const last = parseFloat(matches[matches.length - 1]);
-        if (last >= 0 && last <= 100) onPercent(last / 100);
+        // The engine reports 100% when all tiles are *submitted*, but GPU compute
+        // and the PNG write still follow — so cap at 0.99 and let process-close
+        // signal the real finish. Avoids a "stuck at 100%" state.
+        if (last >= 0 && last <= 100) onPercent(Math.min(0.99, last / 100));
       }
     };
     proc.stdout.on("data", onData);

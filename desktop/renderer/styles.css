@@ -179,12 +179,6 @@ button, .link { -webkit-app-region: no-drag; }
   padding: 7px 15px; border-radius: var(--radius-pill);
   backdrop-filter: blur(6px);
 }
-.compare__loading-pill::before {
-  content: ""; display: inline-block; width: 6px; height: 6px;
-  margin-right: 8px; border-radius: 50%; background: #fff; vertical-align: middle;
-  animation: pulse 1.1s ease-in-out infinite;
-}
-@keyframes pulse { 0%, 100% { opacity: 0.35; } 50% { opacity: 1; } }
 
 /* Video result */
 .videobox { margin: 0 auto; max-width: 100%; }

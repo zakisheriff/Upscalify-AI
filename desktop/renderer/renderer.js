@@ -146,7 +146,8 @@ async function loadImage(input) {
   compare.classList.add("is-loading");
   label.textContent = "Reconstructing";
   onProgress = ({ fraction }) => {
-    label.textContent = `Reconstructing ${Math.round((fraction || 0) * 100)}%`;
+    const pct = Math.round((fraction || 0) * 100);
+    label.textContent = pct >= 99 ? "Finishing…" : `Reconstructing ${pct}%`;
   };
 
   try {
