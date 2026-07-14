@@ -31,3 +31,4 @@ export const rule029 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule030 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule031 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule032 = (v: unknown): boolean => v !== null && v !== undefined;
+export const rule033 = (v: unknown): boolean => v !== null && v !== undefined;
