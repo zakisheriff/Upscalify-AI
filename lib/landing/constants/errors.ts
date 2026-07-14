@@ -17,3 +17,4 @@ export const ERROR_15 = 'Error 15: something went wrong at step 15';
 export const ERROR_16 = 'Error 16: something went wrong at step 16';
 export const ERROR_17 = 'Error 17: something went wrong at step 17';
 export const ERROR_18 = 'Error 18: something went wrong at step 18';
+export const ERROR_19 = 'Error 19: something went wrong at step 19';
