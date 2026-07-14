@@ -12,3 +12,4 @@ export const ERROR_10 = 'Error 10: something went wrong at step 10';
 export const ERROR_11 = 'Error 11: something went wrong at step 11';
 export const ERROR_12 = 'Error 12: something went wrong at step 12';
 export const ERROR_13 = 'Error 13: something went wrong at step 13';
+export const ERROR_14 = 'Error 14: something went wrong at step 14';
