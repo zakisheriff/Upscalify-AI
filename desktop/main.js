@@ -29,6 +29,12 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Dock icon in development (packaged builds use build/icon.icns).
+  if (process.platform === "darwin" && app.dock) {
+    try {
+      app.dock.setIcon(path.join(__dirname, "build", "icon.png"));
+    } catch {}
+  }
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();

@@ -12,17 +12,17 @@
   gap: 26px;
 }
 
-/* ---- title (Ndot55 — Nothing dot-matrix) ---- */
+/* ---- title (Upscalify dot-matrix logo mark) ---- */
 .title {
   margin: 0;
   text-align: center;
-  font-family: var(--font-dot), var(--font-system);
-  font-size: clamp(2.6rem, 8vw, 4.6rem);
-  font-weight: 400;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--text);
   line-height: 1;
+}
+.title__logo {
+  display: block;
+  width: clamp(160px, 34vw, 260px);
+  height: auto;
+  margin: 0 auto;
 }
 .title__script {
   font-family: inherit;

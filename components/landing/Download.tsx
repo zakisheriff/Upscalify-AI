@@ -72,9 +72,6 @@ export default function Download() {
             <h2 className="download__title">
               get upscalify
             </h2>
-            <p className="download__subtitle">
-              free and open source. runs on your machine, not our servers.
-            </p>
           </div>
         </SectionReveal>
 

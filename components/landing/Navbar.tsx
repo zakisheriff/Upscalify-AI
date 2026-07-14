@@ -32,8 +32,8 @@ export default function Navbar() {
         transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
       >
         <div className="navbar__inner">
-          <a href="/" className="navbar__logo">
-            Upscalify
+          <a href="/" className="navbar__logo" aria-label="Upscalify AI">
+            <img src="/logo-upscalify.png" alt="Upscalify AI" className="navbar__logo-img" />
           </a>
 
           {!isMobile && (

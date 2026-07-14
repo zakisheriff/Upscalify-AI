@@ -20,6 +20,7 @@
     "files": ["main.js", "preload.js", "engine.js", "upscale.js", "renderer/**/*"],
     "mac": {
       "category": "public.app-category.photography",
+      "icon": "build/icon.icns",
       "target": ["dmg"]
     },
     "dmg": {

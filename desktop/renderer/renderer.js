@@ -92,6 +92,7 @@ async function loadInput(input) {
   state.input = input;
   state.output = null;
   $("dropzone").classList.add("hidden");
+  $("pills").classList.add("hidden");
   $("stage").classList.remove("hidden");
   $("img-before").src = input.dataURL;
   $("img-after").src = input.dataURL; // shown until the result arrives
@@ -128,6 +129,7 @@ $("reset").addEventListener("click", () => {
   state.input = null;
   state.output = null;
   $("stage").classList.add("hidden");
+  $("pills").classList.remove("hidden");
   $("dropzone").classList.remove("hidden");
 });
 
