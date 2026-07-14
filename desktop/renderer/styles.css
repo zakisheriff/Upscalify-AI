@@ -70,7 +70,7 @@ button, .link { -webkit-app-region: no-drag; }
   display: flex; align-items: center; justify-content: space-between;
   padding: 4px 0 20px;
 }
-.pills { display: flex; gap: 8px; }
+.pills { display: flex; gap: 8px; justify-content: center; margin-top: 16px; }
 .pill {
   border: 1px solid var(--border-strong); background: var(--panel);
   color: var(--text-2); padding: 8px 16px; border-radius: var(--radius-pill);
@@ -82,10 +82,12 @@ button, .link { -webkit-app-region: no-drag; }
 /* Dropzone */
 .dropzone {
   border: 2px dashed var(--border-strong); border-radius: var(--radius);
-  background: var(--panel);
-  min-height: 58vh; display: flex; align-items: center; justify-content: center;
+  background: var(--panel); cursor: pointer;
+  min-height: 340px; display: flex; align-items: center; justify-content: center;
   transition: border-color 0.15s, background 0.15s;
 }
+.dropzone:hover { border-color: var(--border); background: var(--hover); }
+.dropzone:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dropzone.is-over { border-color: var(--ink); background: var(--ink-soft); }
 .dropzone__inner { text-align: center; }
 .glyph {

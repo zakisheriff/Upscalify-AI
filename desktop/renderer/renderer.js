@@ -52,12 +52,20 @@ $("pills").addEventListener("click", (e) => {
 
 // --- input: browse + drag/drop ---------------------------------------------
 
-$("browse").addEventListener("click", async () => {
+const dz = $("dropzone");
+
+// The whole dropzone opens the file picker.
+async function openPicker() {
   const res = await window.api.pickInput();
   if (res) loadInput(res);
+}
+dz.addEventListener("click", openPicker);
+dz.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    openPicker();
+  }
 });
-
-const dz = $("dropzone");
 ["dragenter", "dragover"].forEach((ev) =>
   dz.addEventListener(ev, (e) => {
     e.preventDefault();

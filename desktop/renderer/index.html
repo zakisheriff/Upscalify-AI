@@ -27,21 +27,23 @@
     <main id="app" class="screen hidden">
       <header class="topbar">
         <h1 class="wordmark small">Upscalify <span>AI</span></h1>
-        <div class="pills" id="pills">
-          <button class="pill is-active" data-quality="fast">Fast · 2×</button>
-          <button class="pill" data-quality="high">High quality · 4×</button>
-        </div>
       </header>
 
-      <!-- Dropzone -->
-      <section id="dropzone" class="dropzone">
+      <!-- Dropzone (whole area is clickable) -->
+      <section id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Drop an image here or click to browse files">
         <div class="dropzone__inner">
           <div class="glyph">＋</div>
           <p class="drop-title">Drop an image here</p>
-          <p class="muted small">or <button id="browse" class="link">browse your files</button></p>
+          <p class="muted small">or click to browse your files</p>
           <p class="muted small">JPG · PNG · WEBP · BMP · TIFF</p>
         </div>
       </section>
+
+      <!-- Quality pills (below the dropzone) -->
+      <div class="pills" id="pills">
+        <button class="pill is-active" data-quality="fast">Fast · 2×</button>
+        <button class="pill" data-quality="high">High quality · 4×</button>
+      </div>
 
       <!-- Working / result -->
       <section id="stage" class="stage hidden">
