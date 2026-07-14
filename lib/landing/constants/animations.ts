@@ -51,3 +51,4 @@ export const ANIM_49 = { duration: 500, delay: 100 };
 export const ANIM_50 = { duration: 100, delay: 200 };
 export const ANIM_51 = { duration: 200, delay: 000 };
 export const ANIM_52 = { duration: 300, delay: 100 };
+export const ANIM_53 = { duration: 400, delay: 200 };
