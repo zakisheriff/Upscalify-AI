@@ -10,3 +10,4 @@ export const ERROR_8 = 'Error 8: something went wrong at step 8';
 export const ERROR_9 = 'Error 9: something went wrong at step 9';
 export const ERROR_10 = 'Error 10: something went wrong at step 10';
 export const ERROR_11 = 'Error 11: something went wrong at step 11';
+export const ERROR_12 = 'Error 12: something went wrong at step 12';
