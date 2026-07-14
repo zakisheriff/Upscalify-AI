@@ -69,10 +69,24 @@ public/
   no Real-ESRGAN/SeedVR2 server bundled — the local fallback stands in for the
   models with the same interface and scale factors.
 
+## Video engine (SeedVR2)
+
+High-quality video routes to **real SeedVR2** via `lib/inference/seedvr2.ts` —
+the app spawns the standalone SeedVR2 inference CLI, parses its tqdm progress,
+and `local-video.ts` remuxes the original audio. It's enabled by env
+(`SEEDVR2_DIR`, `SEEDVR2_PYTHON`, model/resolution/batch/device) and needs a
+**CUDA GPU** — it does not run on Apple Silicon. Setup lives in
+`inference/seedvr2/` (`setup.sh` + `README.md`). When unset, video falls back to
+the ffmpeg scaler. The integration (arg passing, progress, audio mux, dims) is
+verified end-to-end against a stub CLI; only the model's GPU compute is
+unexercised locally.
+
 ## Intentionally deferred (cloud phase)
 
 - Hosting the inference layer remotely. The seam (`getBackend` / `INFERENCE_URL`)
   is ready; the model server and its NDJSON progress contract are not built.
+- Running SeedVR2 on this machine (no CUDA). The integration is complete; it
+  needs a GPU box to actually execute.
 - Persistent storage / a real job store (currently filesystem + in-memory Map).
 - Anything auth, billing, queue, or multi-user. Out of scope for v1 by design.
 

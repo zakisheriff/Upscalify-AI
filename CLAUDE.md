@@ -45,10 +45,14 @@ types.ts`), selected in `lib/inference/backend.ts`:
     found, it falls back to a sharp Lanczos+denoise pass that keeps the app
     working but looks softer/grainier on rough sources. `fast` → lite model @2×,
     `high` → standard model @4×.
-  - Video → `local-video.ts` (ffmpeg: single deterministic filtergraph so
-    motion stays temporally stable; original audio copied through; real
-    progress from ffmpeg `-progress`). Video still uses the ffmpeg scaler, not
-    the model — a frame-by-frame Real-ESRGAN video path is deferred.
+  - Video → `local-video.ts`. High-quality path is **real SeedVR2**
+    (`seedvr2.ts`): the app shells out to the standalone SeedVR2 inference CLI
+    (one-step diffusion transformer, temporal-consistency batching), then remuxes
+    the original audio back with ffmpeg. SeedVR2 needs a CUDA GPU, so it
+    activates only when `SEEDVR2_DIR` points at a working install (see
+    `inference/seedvr2/`). Fast path, and the fallback when SeedVR2 isn't
+    configured, is a deterministic ffmpeg Lanczos+unsharp filtergraph (quick,
+    temporally stable, keeps audio) — not the model.
 
 Swapping the local fallback for the model server is a change to `backend.ts` and
 the `remote-*` client only. `scale.ts` is the single place quality maps to a
