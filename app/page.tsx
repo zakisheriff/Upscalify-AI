@@ -4,7 +4,7 @@ export default function Home() {
   return (
     <main className="page">
       <h1 className="title">
-        <img className="title__logo" src="/logo-upscalify.png" alt="Upscalify AI" />
+        Upscalify<span className="title__script">ai</span>
       </h1>
       <p className="subtitle">
         Drop an image or video and get a sharper, higher-resolution version. Runs on your machine.

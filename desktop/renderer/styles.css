@@ -54,9 +54,18 @@ button, .link { -webkit-app-region: no-drag; }
   display: flex; flex-direction: column; justify-content: center;
 }
 
-/* Logo mark */
-.logo { display: block; width: auto; height: 40px; object-fit: contain; }
-.logo--lg { height: 132px; margin: 0 auto 20px; }
+/* Wordmark — Nothing Ndot55 dot-matrix */
+.wordmark {
+  margin: 0;
+  font-family: var(--font-dot);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--ink);
+  line-height: 1;
+}
+.wordmark span { color: var(--ink); }
+.wordmark.small { font-size: 22px; }
 
 /* Setup screen */
 #setup { display: flex; align-items: center; justify-content: center; min-height: 90vh; }
@@ -86,7 +95,7 @@ button, .link { -webkit-app-region: no-drag; }
   min-height: 340px; display: flex; align-items: center; justify-content: center;
   transition: border-color 0.15s, background 0.15s;
 }
-.dropzone:hover { border-color: var(--border); background: var(--hover); }
+.dropzone:hover { border-color: var(--border); }
 .dropzone:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dropzone.is-over { border-color: var(--ink); background: var(--ink-soft); }
 .dropzone__inner { text-align: center; }

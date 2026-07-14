@@ -78,16 +78,11 @@
 }
 
 .navbar__logo {
-  display: inline-flex;
-  align-items: center;
+  font-size: 1.125rem;
+  font-weight: 600;
+  letter-spacing: -0.02em;
   color: var(--lp-text);
   transition: opacity 0.3s;
-}
-
-.navbar__logo-img {
-  display: block;
-  height: 34px;
-  width: auto;
 }
 
 .navbar__logo:hover {
