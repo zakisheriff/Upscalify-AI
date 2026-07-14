@@ -1,0 +1,56 @@
+# Upscalify AI
+
+> An AI image and video upscaler from The Atom. It reconstructs real detail in
+> low-resolution or low-quality files, producing a sharper, higher-resolution
+> result rather than a blurred enlargement.
+
+Upscalify AI is a web application at https://upscalify.theatom.lk. It is part of
+The Atom's product family (https://theatom.lk) and was built by Zaki.
+
+## What it does
+
+- Upscales images: an image is analyzed and reconstructed in a single pass to a
+  higher resolution with sharper edges and cleaner texture.
+- Upscales video: each frame is reconstructed and checked against neighbouring
+  frames for temporal consistency, so motion stays steady without flicker. The
+  clip is reassembled with its original audio track preserved.
+- Before/after comparison: the reconstructed result can be compared directly
+  against the original with a draggable divider before downloading.
+
+## Quality options
+
+Two paths are offered, described by outcome rather than by the model that powers
+them:
+
+- Fast: roughly doubles resolution and returns in seconds. Suited to sources
+  that are already reasonable, or for a quick lift.
+- High quality: reconstructs more aggressively at a higher scale, taking longer,
+  for small, soft, or noisy sources.
+
+## How it runs
+
+In the current version (v1), all processing happens locally on the user's own
+machine against an on-device inference engine. Files are not uploaded to any
+third-party service. There is no account, no billing, and no job queue. Results
+are written to local storage for download.
+
+A later phase will move the inference layer to a hosted backend for users
+without local hardware. The application is built around a single upscale
+interface so this change is invisible to the user experience.
+
+## Supported inputs
+
+- Images: JPEG, PNG, WebP, AVIF, TIFF, BMP, GIF (up to 30 MB).
+- Video: MP4, MOV, WebM, MKV, AVI (up to 500 MB).
+
+## Pages
+
+- https://upscalify.theatom.lk/ — the product and the tool itself.
+- https://upscalify.theatom.lk/about — what Upscalify is, who built it, and its
+  relationship to The Atom.
+
+## Attribution
+
+- Product: Upscalify AI
+- Maker: Zaki
+- Studio: The Atom (https://theatom.lk)

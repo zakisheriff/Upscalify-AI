@@ -1,14 +1,15 @@
 import type { Metadata } from "next";
 import { Fraunces, IBM_Plex_Sans, IBM_Plex_Mono } from "next/font/google";
 import "./globals.css";
+import "./components.css";
 import { StructuredData } from "@/components/StructuredData";
 
 // Display face carries an optical-size axis — used to make headlines "sharpen".
+// Variable font: exposes wght + optical axes so headlines can "sharpen".
 const fraunces = Fraunces({
   variable: "--font-display",
   subsets: ["latin"],
   axes: ["opsz", "SOFT"],
-  weight: ["400", "460", "500"],
   display: "swap",
 });
 

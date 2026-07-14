@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Upscalify AI">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#171b24"/>
+      <stop offset="0.6" stop-color="#1d2330"/>
+      <stop offset="1" stop-color="#4a3a2c"/>
+    </linearGradient>
+    <linearGradient id="seam" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#e39a3b" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#f0b968" stop-opacity="0.8"/>
+      <stop offset="1" stop-color="#e39a3b" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="630" fill="#15181e"/>
+  <rect width="1200" height="630" fill="url(#sky)" opacity="0.5"/>
+  <!-- blocky (left) vs sharp (right) suggestion -->
+  <g opacity="0.5">
+    <rect x="0" y="360" width="60" height="270" fill="#0f1218"/>
+    <rect x="70" y="300" width="80" height="330" fill="#101319"/>
+    <rect x="160" y="400" width="50" height="230" fill="#0f1218"/>
+    <rect x="220" y="330" width="70" height="300" fill="#101319"/>
+    <rect x="300" y="420" width="60" height="210" fill="#0f1218"/>
+  </g>
+  <rect x="600" y="0" width="4" height="630" fill="url(#seam)"/>
+  <rect x="601" y="0" width="1.5" height="630" fill="#f0b968"/>
+  <text x="80" y="300" font-family="Georgia, serif" font-size="76" fill="#edeff2" font-weight="500" letter-spacing="-2">Reconstruct the detail</text>
+  <text x="80" y="380" font-family="Georgia, serif" font-size="76" fill="#edeff2" font-weight="500" letter-spacing="-2">a file lost.</text>
+  <text x="80" y="470" font-family="ui-monospace, monospace" font-size="26" fill="#8a93a0">Upscalify AI — an image and video upscaler from The Atom</text>
+</svg>
