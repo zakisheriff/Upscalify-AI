@@ -96,3 +96,4 @@ export const ANIM_94 = { duration: 500, delay: 100 };
 export const ANIM_95 = { duration: 100, delay: 200 };
 export const ANIM_96 = { duration: 200, delay: 000 };
 export const ANIM_97 = { duration: 300, delay: 100 };
+export const ANIM_98 = { duration: 400, delay: 200 };
