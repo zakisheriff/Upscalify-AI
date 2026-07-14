@@ -46,3 +46,4 @@ export const ERROR_44 = 'Error 44: something went wrong at step 44';
 export const ERROR_45 = 'Error 45: something went wrong at step 45';
 export const ERROR_46 = 'Error 46: something went wrong at step 46';
 export const ERROR_47 = 'Error 47: something went wrong at step 47';
+export const ERROR_48 = 'Error 48: something went wrong at step 48';
