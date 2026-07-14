@@ -144,11 +144,11 @@ export function Studio() {
     );
   }
 
-  // ---- idle: the bar + quality pills ----
+  // ---- idle: dropzone + quality + action ----
   return (
     <div className="studio">
       <label
-        className={`bar${dragOver ? " bar--over" : ""}`}
+        className={`dropzone${dragOver ? " dropzone--over" : ""}${file ? " dropzone--filled" : ""}`}
         onDragOver={(e) => {
           e.preventDefault();
           setDragOver(true);
@@ -167,32 +167,28 @@ export function Studio() {
           onChange={(e) => chooseFile(e.target.files?.[0] ?? null)}
           hidden
         />
-        <span className="bar__icon" aria-hidden="true">
-          <PhotoIcon />
-        </span>
-        <span className="bar__text">
-          {file ? (
-            <>
-              <span className="bar__filename">{file.name}</span>
-              <span className="bar__sub">
+        {file ? (
+          <div className="dropzone__file">
+            <span className="dropzone__thumb" aria-hidden="true">
+              {kind === "video" ? <FilmIcon /> : <PhotoIcon />}
+            </span>
+            <span className="dropzone__info">
+              <span className="dropzone__name">{file.name}</span>
+              <span className="dropzone__meta">
                 {kind === "video" ? "Video" : "Image"} · {formatBytes(file.size)}
               </span>
-            </>
-          ) : (
-            <span className="bar__placeholder">Drop an image or video, or click to choose</span>
-          )}
-        </span>
-        <button
-          type="button"
-          className="bar__go"
-          disabled={!file}
-          onClick={(e) => {
-            e.preventDefault();
-            run();
-          }}
-        >
-          Upscale
-        </button>
+            </span>
+            <span className="dropzone__change">Replace</span>
+          </div>
+        ) : (
+          <div className="dropzone__prompt">
+            <span className="dropzone__icon" aria-hidden="true">
+              <PhotoIcon />
+            </span>
+            <span className="dropzone__lead">Drag an image or video here</span>
+            <span className="dropzone__hint">or click to choose · processed on your machine</span>
+          </div>
+        )}
       </label>
 
       <fieldset className="pills">
@@ -214,7 +210,22 @@ export function Studio() {
           High quality <span className="pill__meta">4×</span>
         </button>
       </fieldset>
+
+      <div className="studio__actions">
+        <button className="btn btn--primary btn--wide" disabled={!file} onClick={run}>
+          Upscale
+        </button>
+      </div>
     </div>
+  );
+}
+
+function FilmIcon() {
+  return (
+    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="3" y="4" width="18" height="16" rx="2.5" />
+      <path d="M3 9h18M3 15h18M8 4v16M16 4v16" />
+    </svg>
   );
 }
 
