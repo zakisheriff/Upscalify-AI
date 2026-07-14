@@ -95,39 +95,39 @@ async function loadInput(input) {
   $("pills").classList.add("hidden");
   $("stage").classList.remove("hidden");
   $("img-before").src = input.dataURL;
-  $("img-after").src = input.dataURL; // shown until the result arrives
+  $("img-after").src = input.dataURL; // shown, dimmed, while reconstructing
   $("save").disabled = true;
   $("meta").textContent = input.name;
 
-  // start reconstruction
-  $("progress").classList.remove("hidden");
-  const bar = $("work-bar");
-  bar.classList.add("indeterminate");
-  $("work-status").textContent = "Reconstructing…";
+  // start reconstruction — clean shimmer loading state, no fake compare
+  const compare = $("compare");
+  const label = $("loading-label");
+  compare.classList.remove("is-error");
+  compare.classList.add("is-loading");
+  label.textContent = "Reconstructing";
 
   window.api.onUpscaleProgress(({ fraction }) => {
-    bar.classList.remove("indeterminate");
-    bar.style.width = `${Math.round(fraction * 100)}%`;
-    $("work-status").textContent = `Reconstructing… ${Math.round(fraction * 100)}%`;
+    label.textContent = `Reconstructing ${Math.round(fraction * 100)}%`;
   });
 
   try {
     const out = await window.api.upscale(input.path, state.quality);
     state.output = out;
     $("img-after").src = out.dataURL;
+    compare.classList.remove("is-loading");
     $("save").disabled = false;
-    $("progress").classList.add("hidden");
     $("meta").textContent = `${input.name} · ${out.model} · ${(out.elapsedMs / 1000).toFixed(1)}s`;
     setupCompare();
   } catch (err) {
-    $("work-status").textContent = `Failed: ${err.message}`;
-    bar.classList.remove("indeterminate");
+    compare.classList.add("is-error");
+    label.textContent = `Failed: ${err.message}`;
   }
 }
 
 $("reset").addEventListener("click", () => {
   state.input = null;
   state.output = null;
+  $("compare").classList.remove("is-loading", "is-error");
   $("stage").classList.add("hidden");
   $("pills").classList.remove("hidden");
   $("dropzone").classList.remove("hidden");
