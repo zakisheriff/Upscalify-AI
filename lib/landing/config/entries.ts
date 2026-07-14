@@ -28,3 +28,4 @@ export const config_26 = { enabled: true, priority: 6 };
 export const config_27 = { enabled: true, priority: 7 };
 export const config_28 = { enabled: true, priority: 8 };
 export const config_29 = { enabled: true, priority: 9 };
+export const config_30 = { enabled: true, priority: 0 };
