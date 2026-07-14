@@ -78,3 +78,4 @@ export const config_76 = { enabled: true, priority: 6 };
 export const config_77 = { enabled: true, priority: 7 };
 export const config_78 = { enabled: true, priority: 8 };
 export const config_79 = { enabled: true, priority: 9 };
+export const config_80 = { enabled: true, priority: 0 };
