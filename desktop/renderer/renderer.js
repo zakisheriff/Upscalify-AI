@@ -104,36 +104,50 @@ dz.addEventListener("keydown", (e) => {
 );
 dz.addEventListener("drop", async (e) => {
   const file = e.dataTransfer.files[0];
-  if (!file || !file.type.startsWith("image/")) return;
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const res = await window.api.inputFromBytes(bytes, file.name);
+  if (!file) return;
+  const isMedia = file.type.startsWith("image/") || file.type.startsWith("video/");
+  if (!isMedia) return;
+  // Prefer the real path (no byte copy — important for large videos).
+  const p = window.api.pathForFile(file);
+  const res = p
+    ? await window.api.inputFromPath(p)
+    : await window.api.inputFromBytes(new Uint8Array(await file.arrayBuffer()), file.name);
   loadInput(res);
 });
 
 // --- run -------------------------------------------------------------------
 
-async function loadInput(input) {
+// Single progress dispatcher: whichever mode is active sets `onProgress`.
+let onProgress = () => {};
+window.api.onUpscaleProgress((p) => onProgress(p));
+
+function loadInput(input) {
   state.input = input;
   state.output = null;
   $("dropzone").classList.add("hidden");
   $("pills").classList.add("hidden");
   $("stage").classList.remove("hidden");
+  $("save").disabled = true;
+  $("meta").textContent = input.name;
+  if (input.kind === "video") return loadVideo(input);
+  return loadImage(input);
+}
+
+async function loadImage(input) {
+  $("videobox").classList.add("hidden");
+  $("compare").classList.remove("hidden");
   $("img-before").onload = fitCompare; // size the frame as soon as the image is known
   $("img-before").src = input.dataURL;
   $("img-after").src = input.dataURL; // shown, dimmed, while reconstructing
-  $("save").disabled = true;
-  $("meta").textContent = input.name;
 
-  // start reconstruction — clean shimmer loading state, no fake compare
   const compare = $("compare");
   const label = $("loading-label");
   compare.classList.remove("is-error");
   compare.classList.add("is-loading");
   label.textContent = "Reconstructing";
-
-  window.api.onUpscaleProgress(({ fraction }) => {
-    label.textContent = `Reconstructing ${Math.round(fraction * 100)}%`;
-  });
+  onProgress = ({ fraction }) => {
+    label.textContent = `Reconstructing ${Math.round((fraction || 0) * 100)}%`;
+  };
 
   try {
     const out = await window.api.upscale(input.path, state.quality);
@@ -149,10 +163,41 @@ async function loadInput(input) {
   }
 }
 
+async function loadVideo(input) {
+  $("compare").classList.add("hidden");
+  $("videobox").classList.remove("hidden");
+  const frame = $("videoframe");
+  const label = $("vloading-label");
+  frame.classList.add("is-loading");
+  label.textContent = "Reconstructing";
+  onProgress = (p) => {
+    label.textContent = p.detail
+      ? `Reconstructing ${p.detail}`
+      : `Reconstructing ${Math.round((p.fraction || 0) * 100)}%`;
+  };
+
+  try {
+    const out = await window.api.upscale(input.path, state.quality);
+    state.output = out;
+    const v = $("result-video");
+    v.src = out.dataURL;
+    frame.classList.remove("is-loading");
+    $("save").disabled = false;
+    $("meta").textContent = `${input.name} · ${out.model} · ${(out.elapsedMs / 1000).toFixed(1)}s`;
+  } catch (err) {
+    label.textContent = `Failed: ${err.message}`;
+  }
+}
+
 $("reset").addEventListener("click", () => {
   state.input = null;
   state.output = null;
+  onProgress = () => {};
   $("compare").classList.remove("is-loading", "is-error");
+  const v = $("result-video");
+  v.pause();
+  v.removeAttribute("src");
+  v.load();
   $("stage").classList.add("hidden");
   $("pills").classList.remove("hidden");
   $("dropzone").classList.remove("hidden");
@@ -160,8 +205,10 @@ $("reset").addEventListener("click", () => {
 
 $("save").addEventListener("click", async () => {
   if (!state.output) return;
-  const base = (state.input.name || "image").replace(/\.[^.]+$/, "");
-  await window.api.save(state.output.outputPath, `${base}-upscaled.png`);
+  const isVideo = state.output.kind === "video";
+  const base = (state.input.name || "file").replace(/\.[^.]+$/, "");
+  const suggested = `${base}-upscaled.${isVideo ? "mp4" : "png"}`;
+  await window.api.save(state.output.outputPath, suggested, state.output.kind);
 });
 
 // --- before/after slider ---------------------------------------------------

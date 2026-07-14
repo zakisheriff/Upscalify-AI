@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'"
+      content="default-src 'self'; img-src 'self' data:; media-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'"
     />
     <title>Upscalify</title>
     <link rel="stylesheet" href="styles.css" />
@@ -34,9 +34,9 @@
       <section id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Drop an image here or click to browse files">
         <div class="dropzone__inner">
           <div class="glyph">＋</div>
-          <p class="drop-title">Drop an image here</p>
+          <p class="drop-title">Drop an image or video here</p>
           <p class="muted small">or click to browse your files</p>
-          <p class="muted small">JPG · PNG · WEBP · BMP · TIFF</p>
+          <p class="muted small">JPG · PNG · WEBP · MP4 · MOV · WEBM</p>
         </div>
       </section>
 
@@ -58,6 +58,16 @@
           <div class="compare__tag compare__tag--right">Before</div>
           <div class="compare__loading">
             <span id="loading-label" class="compare__loading-pill">Reconstructing</span>
+          </div>
+        </div>
+
+        <!-- Video result -->
+        <div class="videobox hidden" id="videobox">
+          <div class="videobox__frame is-loading" id="videoframe">
+            <video id="result-video" class="result-video" controls playsinline></video>
+            <div class="videobox__loading">
+              <span id="vloading-label" class="compare__loading-pill">Reconstructing</span>
+            </div>
           </div>
         </div>
 
