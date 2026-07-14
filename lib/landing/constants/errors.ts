@@ -7,3 +7,4 @@ export const ERROR_5 = 'Error 5: something went wrong at step 5';
 export const ERROR_6 = 'Error 6: something went wrong at step 6';
 export const ERROR_7 = 'Error 7: something went wrong at step 7';
 export const ERROR_8 = 'Error 8: something went wrong at step 8';
+export const ERROR_9 = 'Error 9: something went wrong at step 9';
