@@ -45,3 +45,4 @@ export const config_43 = { enabled: true, priority: 3 };
 export const config_44 = { enabled: true, priority: 4 };
 export const config_45 = { enabled: true, priority: 5 };
 export const config_46 = { enabled: true, priority: 6 };
+export const config_47 = { enabled: true, priority: 7 };
