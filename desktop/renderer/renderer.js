@@ -39,23 +39,9 @@ async function boot() {
   }
 }
 
-// Handwritten hello: the stroke draws itself along the letter path, then the
-// letters fill in and a "Welcome to Upscalify" + Get started fades up.
-const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-
-async function showWelcome() {
+// First-run welcome: just the wordmark + Get started.
+function showWelcome() {
   show("welcome");
-  const path = $("hello-path");
-  const len = path.getTotalLength();
-  path.style.strokeDasharray = `${len}`;
-  path.style.strokeDashoffset = `${len}`;
-  path.getBoundingClientRect(); // flush layout so the transition runs
-  path.style.transition = "stroke-dashoffset 2.6s cubic-bezier(0.33, 0, 0.2, 1)";
-  requestAnimationFrame(() => (path.style.strokeDashoffset = "0"));
-  await wait(2600);
-  path.classList.add("is-drawn"); // fill the letters in
-  await wait(500);
-  $("welcome-end").classList.add("show");
 }
 
 $("welcome-go").addEventListener("click", () => show("app"));

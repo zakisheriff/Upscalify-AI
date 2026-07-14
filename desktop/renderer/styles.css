@@ -75,30 +75,15 @@ button, .link { -webkit-app-region: no-drag; }
 .setup-card #setup-status { margin-bottom: 4px; }
 .setup-detail { font-variant-numeric: tabular-nums; color: var(--text-disabled); min-height: 1.2em; }
 
-/* First-run welcome — a handwritten "hello" that draws itself, Apple-style */
+/* First-run welcome — wordmark + Get started, quiet fade in */
 #welcome {
   display: flex; align-items: center; justify-content: center;
   min-height: calc(100vh - 28px);
 }
-.welcome { text-align: center; }
-.hello-svg {
-  width: min(58vw, 440px); height: auto; display: block; margin: 0 auto;
-  overflow: visible;
-}
-#hello-path {
-  fill: transparent;
-  stroke: var(--ink);
-  stroke-width: 9;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-#hello-path.is-drawn { fill: var(--ink); transition: fill 0.55s ease; }
-.welcome__end {
-  margin-top: 44px; opacity: 0; pointer-events: none;
-  transition: opacity 0.6s ease;
-}
-.welcome__end.show { opacity: 1; pointer-events: auto; }
-.welcome__title { font-size: 19px; color: var(--text-2); margin: 0 0 20px; }
+.welcome { text-align: center; animation: welcome-in 0.5s ease both; }
+.welcome__mark { font-size: clamp(40px, 8vw, 74px); margin: 0 0 36px; }
+.welcome__go { font-size: 15px; }
+@keyframes welcome-in { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 
 /* Topbar */
 .topbar {
