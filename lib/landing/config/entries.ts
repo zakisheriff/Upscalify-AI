@@ -81,3 +81,4 @@ export const config_79 = { enabled: true, priority: 9 };
 export const config_80 = { enabled: true, priority: 0 };
 export const config_81 = { enabled: true, priority: 1 };
 export const config_82 = { enabled: true, priority: 2 };
+export const config_83 = { enabled: true, priority: 3 };
