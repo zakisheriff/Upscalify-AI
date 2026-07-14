@@ -22,3 +22,4 @@ export const rule020 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule021 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule022 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule023 = (v: unknown): boolean => v !== null && v !== undefined;
+export const rule024 = (v: unknown): boolean => v !== null && v !== undefined;
