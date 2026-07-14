@@ -1,0 +1,42 @@
+/* Upscalify AI — site reset + tokens. Light, monochrome, quiet. */
+
+:root {
+  --bg: #ffffff;
+  --ink: #111111;
+  --ink-2: #5b5b5b;
+  --ink-3: #8a8a8a;
+  --line: #e6e6e6;
+  --line-2: #d6d6d6;
+  --soft: #f6f6f6;
+  --radius: 14px;
+  --radius-lg: 28px;
+  --font: var(--font-ui), -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Segoe UI", Roboto, sans-serif;
+  color-scheme: light;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a { color: inherit; }
+
+img { max-width: 100%; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}

@@ -1,0 +1,17 @@
+# Upscalify AI
+
+> A free, open-source image and video upscaler for macOS. It reconstructs real
+> detail with Real-ESRGAN, runs entirely on-device, and never uploads your files.
+
+## What it is
+- A native Mac app (Apple Silicon or Intel). Not a web tool — you install it and run it locally.
+- Images: Real-ESRGAN (the same models as Upscayl), fast 2x and high-quality 4x.
+- Video: an ffmpeg Lanczos + unsharp pass that keeps the original audio.
+- Free, no account, no upload. Works offline after a one-time ~42 MB model download.
+
+## Get it
+- Download: https://github.com/zakisheriff/Upscalify/releases/latest
+- Source: https://github.com/zakisheriff/Upscalify
+
+## Maker
+- Built by Zaki Sheriff at The Atom (https://theatom.lk).
