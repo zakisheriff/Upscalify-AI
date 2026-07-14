@@ -18,7 +18,12 @@ Quality is exposed by outcome, never by model name:
 - **Fast** → `upscayl-lite-4x` (light, quick)
 - **High quality** → `upscayl-standard-4x` (full Real-ESRGAN x4plus)
 
-Video stays in the web app — Upscayl-class desktop tools are image-only.
+**Video** is supported too (`video.js`). It uses the same deterministic ffmpeg
+path the web app uses off-CUDA — a Lanczos scale + unsharp pass that is quick,
+temporally stable, and keeps the original audio. No AI model or extra weights;
+it only needs `ffmpeg`/`ffprobe` (located from the usual install dirs or PATH —
+`brew install ffmpeg`). SeedVR2 is intentionally not bundled: it needs a CUDA
+GPU and cannot run on macOS.
 
 ## Run it (development)
 
@@ -47,6 +52,7 @@ desktop/
 ├── main.js            # Electron main: windows + IPC (input, run, save)
 ├── preload.js         # Safe IPC bridge (contextIsolation)
 ├── engine.js          # First-run download of binary + models; locates them
-├── upscale.js         # Spawns Real-ESRGAN, parses progress
+├── upscale.js         # Spawns Real-ESRGAN for images, parses progress
+├── video.js           # ffmpeg Lanczos+unsharp video path (keeps audio)
 └── renderer/          # UI (index.html, styles.css, renderer.js)
 ```
