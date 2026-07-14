@@ -54,3 +54,4 @@ export const config_52 = { enabled: true, priority: 2 };
 export const config_53 = { enabled: true, priority: 3 };
 export const config_54 = { enabled: true, priority: 4 };
 export const config_55 = { enabled: true, priority: 5 };
+export const config_56 = { enabled: true, priority: 6 };
