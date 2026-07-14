@@ -80,7 +80,6 @@ export function Landing() {
         <div className="wrap top__inner">
           <a className="brand" href="/">Upscalify ai</a>
           <nav className="top__links">
-            <a className="top__link" href="#what">What it does</a>
             <a className="top__link" href="#install">Install</a>
             <a className="top__link" href={REPO} rel="noopener">GitHub</a>
             <a className="btn btn--primary btn--sm" href={RELEASES}>Download</a>
