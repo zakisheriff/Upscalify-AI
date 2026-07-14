@@ -69,3 +69,4 @@ export const config_67 = { enabled: true, priority: 7 };
 export const config_68 = { enabled: true, priority: 8 };
 export const config_69 = { enabled: true, priority: 9 };
 export const config_70 = { enabled: true, priority: 0 };
+export const config_71 = { enabled: true, priority: 1 };
