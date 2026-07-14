@@ -75,33 +75,26 @@ button, .link { -webkit-app-region: no-drag; }
 .setup-card #setup-status { margin-bottom: 4px; }
 .setup-detail { font-variant-numeric: tabular-nums; color: var(--text-disabled); min-height: 1.2em; }
 
-/* First-run welcome — Apple-style handwritten "hello" */
+/* First-run welcome — a handwritten "hello" that draws itself, Apple-style */
 #welcome {
   display: flex; align-items: center; justify-content: center;
   min-height: calc(100vh - 28px);
 }
 .welcome { text-align: center; }
-.hello {
-  font-family: "Snell Roundhand", "Apple Chancery", "Segoe Script", cursive;
-  font-weight: 700;
-  font-size: clamp(60px, 13vw, 140px);
-  color: var(--ink);
-  line-height: 1.15;
-  min-height: 1.15em;
+.hello-svg {
+  width: min(58vw, 440px); height: auto; display: block; margin: 0 auto;
+  overflow: visible;
 }
-.hello.is-in { animation: write-in 0.9s cubic-bezier(0.6, 0.02, 0.2, 1) forwards; }
-.hello.is-out { animation: hello-out 0.34s ease forwards; }
-@keyframes write-in {
-  from { clip-path: inset(0 100% -25% 0); opacity: 0; }
-  55%  { opacity: 1; }
-  to   { clip-path: inset(0 0 -25% 0); opacity: 1; }
+#hello-path {
+  fill: transparent;
+  stroke: var(--ink);
+  stroke-width: 9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
-@keyframes hello-out {
-  from { opacity: 1; }
-  to { opacity: 0; transform: translateY(-8px); }
-}
+#hello-path.is-drawn { fill: var(--ink); transition: fill 0.55s ease; }
 .welcome__end {
-  margin-top: 40px; opacity: 0; pointer-events: none;
+  margin-top: 44px; opacity: 0; pointer-events: none;
   transition: opacity 0.6s ease;
 }
 .welcome__end.show { opacity: 1; pointer-events: auto; }

@@ -39,27 +39,23 @@ async function boot() {
   }
 }
 
-// Apple-style handwritten hello: greetings drawn on left-to-right, then a
-// "Welcome to Upscalify" with a Get started button.
+// Handwritten hello: the stroke draws itself along the letter path, then the
+// letters fill in and a "Welcome to Upscalify" + Get started fades up.
 const wait = (ms) => new Promise((r) => setTimeout(r, ms));
 
 async function showWelcome() {
   show("welcome");
-  const el = $("hello");
-  const greetings = ["hello", "hola", "bonjour", "ciao", "olá", "hallo"];
-  for (let i = 0; i < greetings.length; i++) {
-    el.textContent = greetings[i];
-    el.classList.remove("is-in", "is-out");
-    void el.offsetWidth; // restart the animation
-    el.classList.add("is-in");
-    await wait(1050);
-    if (i < greetings.length - 1) {
-      el.classList.remove("is-in");
-      el.classList.add("is-out");
-      await wait(340);
-    }
-  }
-  $("welcome-end").classList.add("show"); // final greeting stays; reveal CTA
+  const path = $("hello-path");
+  const len = path.getTotalLength();
+  path.style.strokeDasharray = `${len}`;
+  path.style.strokeDashoffset = `${len}`;
+  path.getBoundingClientRect(); // flush layout so the transition runs
+  path.style.transition = "stroke-dashoffset 2.6s cubic-bezier(0.33, 0, 0.2, 1)";
+  requestAnimationFrame(() => (path.style.strokeDashoffset = "0"));
+  await wait(2600);
+  path.classList.add("is-drawn"); // fill the letters in
+  await wait(500);
+  $("welcome-end").classList.add("show");
 }
 
 $("welcome-go").addEventListener("click", () => show("app"));
