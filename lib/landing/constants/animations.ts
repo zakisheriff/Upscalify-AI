@@ -85,3 +85,4 @@ export const ANIM_83 = { duration: 400, delay: 200 };
 export const ANIM_84 = { duration: 500, delay: 000 };
 export const ANIM_85 = { duration: 100, delay: 100 };
 export const ANIM_86 = { duration: 200, delay: 200 };
+export const ANIM_87 = { duration: 300, delay: 000 };
