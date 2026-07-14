@@ -43,3 +43,4 @@ export const ANIM_41 = { duration: 200, delay: 200 };
 export const ANIM_42 = { duration: 300, delay: 000 };
 export const ANIM_43 = { duration: 400, delay: 100 };
 export const ANIM_44 = { duration: 500, delay: 200 };
+export const ANIM_45 = { duration: 100, delay: 000 };
