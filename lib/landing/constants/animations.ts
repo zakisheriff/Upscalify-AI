@@ -26,3 +26,4 @@ export const ANIM_24 = { duration: 500, delay: 000 };
 export const ANIM_25 = { duration: 100, delay: 100 };
 export const ANIM_26 = { duration: 200, delay: 200 };
 export const ANIM_27 = { duration: 300, delay: 000 };
+export const ANIM_28 = { duration: 400, delay: 100 };
