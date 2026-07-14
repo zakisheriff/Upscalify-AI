@@ -7,7 +7,10 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 const REPO = "https://github.com/zakisheriff/Upscalify";
-const RELEASES = `${REPO}/releases/latest`;
+// Direct download of the latest release's asset — GitHub serves it as an
+// attachment, so the browser downloads it straight away (no repo detour).
+// The filename must match the asset attached to the latest release exactly.
+const DOWNLOAD = `${REPO}/releases/latest/download/Upscalify-0.1.0-arm64.dmg`;
 
 export function Landing() {
   const reduce = useReducedMotion();
@@ -82,7 +85,7 @@ export function Landing() {
           <nav className="top__links">
             <a className="top__link" href="#install">Install</a>
             <a className="top__link" href={REPO} rel="noopener">GitHub</a>
-            <a className="btn btn--primary btn--sm" href={RELEASES}>Download</a>
+            <a className="btn btn--primary btn--sm" href={DOWNLOAD}>Download</a>
           </nav>
         </div>
       </header>
@@ -94,7 +97,7 @@ export function Landing() {
               Sharper images and video, right on your Mac.
             </motion.p>
             <motion.div className="hero__cta" custom={3} variants={item} initial="hidden" animate="show">
-              <a className="btn btn--primary" href={RELEASES}>Download for Mac</a>
+              <a className="btn btn--primary" href={DOWNLOAD}>Download for Mac</a>
               <a className="btn btn--ghost" href={REPO} rel="noopener">View on GitHub</a>
             </motion.div>
             <motion.p className="hero__note" custom={4} variants={item} initial="hidden" animate="show">
@@ -165,7 +168,7 @@ export function Landing() {
               </div>
             </div>
             <div className="install__cta reveal">
-              <a className="btn btn--primary" href={RELEASES}>Download for Mac</a>
+              <a className="btn btn--primary" href={DOWNLOAD}>Download for Mac</a>
             </div>
           </div>
         </section>
@@ -175,7 +178,7 @@ export function Landing() {
             <span>Upscalify AI by <a href="https://theatom.lk" rel="noopener">The Atom</a>.</span>
             <span className="foot__links">
               <a href={REPO} rel="noopener">GitHub</a>
-              <a href={RELEASES} rel="noopener">Download</a>
+              <a href={DOWNLOAD} rel="noopener">Download</a>
             </span>
           </div>
         </footer>
