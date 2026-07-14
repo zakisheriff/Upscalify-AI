@@ -17,11 +17,11 @@
   "build": {
     "appId": "lk.theatom.upscalify",
     "productName": "Upscalify",
-    "files": ["main.js", "preload.js", "engine.js", "upscale.js", "renderer/**/*"],
+    "files": ["main.js", "preload.js", "engine.js", "upscale.js", "video.js", "renderer/**/*"],
     "mac": {
       "category": "public.app-category.photography",
       "icon": "build/icon.icns",
-      "target": ["dmg"]
+      "target": [{ "target": "dmg", "arch": "arm64" }]
     },
     "dmg": {
       "title": "Upscalify"

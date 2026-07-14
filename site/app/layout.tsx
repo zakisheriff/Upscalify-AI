@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE),
   title: "Upscalify AI — free on-device image and video upscaler for Mac",
   description:
-    "Upscalify AI is a free, open-source upscaler for macOS. It reconstructs real detail with Real-ESRGAN, runs entirely on your machine, and never uploads your files. Download for Apple Silicon or Intel.",
+    "Upscalify AI is a free, open-source upscaler for macOS on Apple Silicon. It reconstructs real detail with Real-ESRGAN, runs entirely on your machine, and never uploads your files.",
   keywords: [
     "image upscaler mac",
     "free upscaler",

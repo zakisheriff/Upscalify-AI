@@ -9,7 +9,7 @@
 <div align="center">
 
 ![Electron](https://img.shields.io/badge/Electron-Desktop-47848f?style=for-the-badge&logo=electron&logoColor=white)
-![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon%20%2F%20Intel-000000?style=for-the-badge&logo=apple&logoColor=white)
+![macOS](https://img.shields.io/badge/macOS-Apple%20Silicon-000000?style=for-the-badge&logo=apple&logoColor=white)
 ![Real-ESRGAN](https://img.shields.io/badge/Engine-Real--ESRGAN-2680eb?style=for-the-badge)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 
@@ -57,7 +57,8 @@ detail. It's a small, focused app that does one thing well.
 
 | Platform | Status |
 |---|---|
-| **macOS** (Apple Silicon & Intel) | ✅ Supported |
+| **macOS** (Apple Silicon, M1 and later) | ✅ Supported |
+| **macOS** (Intel) | ⏳ Not yet — the current build is Apple Silicon only |
 | **Windows** | ⏳ Not yet — the app is built on Electron (cross-platform), but currently ships macOS-only binaries and installer. Windows support is planned. |
 | **Linux** | ⏳ Not yet |
 
