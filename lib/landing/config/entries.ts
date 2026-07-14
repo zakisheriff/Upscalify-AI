@@ -18,3 +18,4 @@ export const config_16 = { enabled: true, priority: 6 };
 export const config_17 = { enabled: true, priority: 7 };
 export const config_18 = { enabled: true, priority: 8 };
 export const config_19 = { enabled: true, priority: 9 };
+export const config_20 = { enabled: true, priority: 0 };
