@@ -6,7 +6,7 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const REPO = "https://github.com/zakisheriff/Upscalify";
+const REPO = "https://github.com/zakisheriff/Upscalify-AI";
 // Direct download of the latest release's asset — GitHub serves it as an
 // attachment, so the browser downloads it straight away (no repo detour).
 // The filename must match the asset attached to the latest release exactly.

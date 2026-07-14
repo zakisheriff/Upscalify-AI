@@ -49,7 +49,7 @@ const jsonLd = {
       name: "Upscalify AI",
       operatingSystem: "macOS",
       applicationCategory: "MultimediaApplication",
-      downloadUrl: "https://github.com/zakisheriff/Upscalify/releases/latest",
+      downloadUrl: "https://github.com/zakisheriff/Upscalify-AI/releases/latest",
       softwareVersion: "0.1.0",
       description:
         "Upscalify AI is a free, open-source macOS app that upscales low-resolution images by reconstructing real detail with Real-ESRGAN. It runs entirely on-device using the GPU and never uploads images.",

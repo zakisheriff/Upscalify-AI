@@ -6,7 +6,7 @@ import Lenis from "lenis";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-const REPO = "https://github.com/zakisheriff/Upscalify";
+const REPO = "https://github.com/zakisheriff/Upscalify-AI";
 const RELEASES = `${REPO}/releases/latest`;
 
 export function DownloadLanding() {

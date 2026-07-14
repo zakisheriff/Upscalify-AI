@@ -15,7 +15,7 @@
 
 <br />
 
-<a href="https://github.com/zakisheriff/Upscalify/releases/latest">
+<a href="https://github.com/zakisheriff/Upscalify-AI/releases/latest">
 <img src="https://img.shields.io/badge/Download%20for%20Mac-Get%20the%20.dmg-000000?style=for-the-badge&logo=apple&logoColor=white" height="50" />
 </a>
 
@@ -66,7 +66,7 @@ detail. It's a small, focused app that does one thing well.
 
 ## 🚀 Install
 
-1. **[Download the `.dmg`](https://github.com/zakisheriff/Upscalify/releases/latest)** and drag Upscalify into your Applications folder.
+1. **[Download the `.dmg`](https://github.com/zakisheriff/Upscalify-AI/releases/latest)** and drag Upscalify into your Applications folder.
 2. **First launch:** it's a new, unsigned build, so right-click the app → **Open** (you only do this once).
 3. **One-time setup:** on first run it downloads the upscaling engine (~42 MB). After that it works completely offline.
 
