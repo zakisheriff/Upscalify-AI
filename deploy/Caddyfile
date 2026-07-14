@@ -1,0 +1,10 @@
+# Automatic HTTPS via Let's Encrypt. Point the domain's A record at the VM's
+# public IP first, then Caddy fetches a certificate on its own.
+{
+	email zakisheriff57@gmail.com
+}
+
+upscalify.theatom.lk {
+	encode zstd gzip
+	reverse_proxy web:3000
+}

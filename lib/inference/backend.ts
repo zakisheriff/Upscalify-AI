@@ -15,6 +15,9 @@ import { makeRemoteBackend } from "./remote-image";
  */
 export function getBackend(kind: MediaKind): InferenceBackend {
   const url = process.env.INFERENCE_URL?.trim();
-  if (url) return makeRemoteBackend(url);
+  // Images can route to a model server (Real-ESRGAN). Video stays on the local
+  // ffmpeg path: the free deployment has no GPU, so the real video engine
+  // (SeedVR2) isn't wired yet — a remote video server slots in here later.
+  if (url && kind === "image") return makeRemoteBackend(url);
   return kind === "video" ? localVideoBackend : localImageBackend;
 }

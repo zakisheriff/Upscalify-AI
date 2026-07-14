@@ -1,0 +1,46 @@
+# Full stack for the Oracle Always Free (or any single-VM) deploy.
+#
+#   caddy  -> terminates HTTPS, reverse-proxies to the app
+#   web    -> Next.js app (UI + API); routes image inference to `inference`
+#   inference -> Real-ESRGAN CPU model server (behind INFERENCE_URL)
+#
+# The app runs as one long-lived process, so the in-memory job registry and
+# temp-dir storage work as-is — no cloud rewrite needed.
+
+services:
+  inference:
+    build: ./inference
+    restart: unless-stopped
+    expose:
+      - "8000"
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/web.Dockerfile
+    environment:
+      # Image inference routes here; video falls back to local ffmpeg.
+      - INFERENCE_URL=http://inference:8000
+      - NODE_ENV=production
+    depends_on:
+      - inference
+    restart: unless-stopped
+    expose:
+      - "3000"
+
+  caddy:
+    image: caddy:2
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      - web
+
+volumes:
+  caddy_data:
+  caddy_config:
