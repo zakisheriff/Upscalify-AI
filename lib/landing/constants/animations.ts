@@ -66,3 +66,4 @@ export const ANIM_64 = { duration: 500, delay: 100 };
 export const ANIM_65 = { duration: 100, delay: 200 };
 export const ANIM_66 = { duration: 200, delay: 000 };
 export const ANIM_67 = { duration: 300, delay: 100 };
+export const ANIM_68 = { duration: 400, delay: 200 };
