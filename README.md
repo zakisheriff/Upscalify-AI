@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Upscalify AI
 
-## Getting Started
+An image and video upscaler from [The Atom](https://theatom.lk). Upload a
+low-resolution or low-quality file and get back a sharper, higher-resolution
+version — real detail reconstructed, not just enlarged. Live at
+[upscalify.theatom.lk](https://upscalify.theatom.lk).
 
-First, run the development server:
+- **Images** are reconstructed in a single pass.
+- **Video** is reconstructed frame by frame with temporal stability, then
+  reassembled with its original audio.
+- **Two paths**: fast (≈2×) and high quality (≈4×), named by outcome.
+
+v1 runs entirely on your own machine. Nothing is uploaded to a third-party
+service.
+
+## Requirements
+
+- Node.js 20+
+- `ffmpeg` and `ffprobe` on your PATH (video only; images work without them)
+
+## Develop
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## How inference is wired
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The frontend only ever calls `upscale(file, options)` from `lib/upscale.ts`. It
+does not know where reconstruction happens. By default a local engine runs
+(sharp for images, ffmpeg for video). Point `INFERENCE_URL` at a model server
+(Real-ESRGAN / SeedVR2) to route there instead — no frontend changes. See
+`CLAUDE.md` and `AGENTS.md` for the full picture.
 
-## Learn More
+```bash
+# optional: use a running model server instead of the local fallback
+INFERENCE_URL=http://127.0.0.1:8008 npm run dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+## Build
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run build && npm run start
+```
