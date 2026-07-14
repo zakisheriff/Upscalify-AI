@@ -10,7 +10,7 @@ const REPO = "https://github.com/zakisheriff/Upscalify-AI";
 // Direct download of the latest release's asset — GitHub serves it as an
 // attachment, so the browser downloads it straight away (no repo detour).
 // The filename must match the asset attached to the latest release exactly.
-const DOWNLOAD = `${REPO}/releases/latest/download/Upscalify-0.1.0-arm64.dmg`;
+const DOWNLOAD = `${REPO}/releases/latest/download/Upscalify-0.1.1-arm64.dmg`;
 
 export function Landing() {
   const reduce = useReducedMotion();
