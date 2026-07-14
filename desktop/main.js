@@ -8,6 +8,7 @@ const crypto = require("node:crypto");
 
 const engine = require("./engine");
 const { run } = require("./upscale");
+const video = require("./video");
 
 let win = null;
 
@@ -17,7 +18,7 @@ function createWindow() {
     height: 760,
     minWidth: 720,
     minHeight: 560,
-    backgroundColor: "#1d1d1d",
+    backgroundColor: "#ffffff",
     titleBarStyle: "hiddenInset",
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
@@ -29,6 +30,12 @@ function createWindow() {
 }
 
 app.whenReady().then(() => {
+  // Dock icon in development (packaged builds use build/icon.icns).
+  if (process.platform === "darwin" && app.dock) {
+    try {
+      app.dock.setIcon(path.join(__dirname, "build", "icon.png"));
+    } catch {}
+  }
   createWindow();
   app.on("activate", () => {
     if (BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -52,6 +59,19 @@ async function toDataURL(filePath) {
   return `data:image/${mime};base64,${buf.toString("base64")}`;
 }
 
+async function toVideoDataURL(filePath) {
+  const buf = await fs.readFile(filePath);
+  return `data:video/mp4;base64,${buf.toString("base64")}`;
+}
+
+// Metadata for a chosen file: images carry a preview data URL, videos don't
+// (they can be large — the renderer plays the result instead).
+async function metaFor(p) {
+  const name = path.basename(p);
+  if (video.isVideoPath(p)) return { path: p, name, kind: "video" };
+  return { path: p, name, kind: "image", dataURL: await toDataURL(p) };
+}
+
 // --- engine setup ----------------------------------------------------------
 
 ipcMain.handle("engine:status", () => ({ installed: engine.isInstalled() }));
@@ -66,12 +86,19 @@ ipcMain.handle("engine:install", async () => {
 ipcMain.handle("input:pick", async () => {
   const res = await dialog.showOpenDialog(win, {
     properties: ["openFile"],
-    filters: [{ name: "Images", extensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff"] }],
+    filters: [
+      { name: "Images and video", extensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff", ...video.VIDEO_EXTS] },
+      { name: "Images", extensions: ["jpg", "jpeg", "png", "webp", "bmp", "tiff"] },
+      { name: "Video", extensions: video.VIDEO_EXTS },
+    ],
   });
   if (res.canceled || res.filePaths.length === 0) return null;
-  const p = res.filePaths[0];
-  return { path: p, name: path.basename(p), dataURL: await toDataURL(p) };
+  return metaFor(res.filePaths[0]);
 });
+
+// Preferred drop path: the renderer resolves the real file path via webUtils and
+// hands it straight here, so large videos aren't copied through IPC as bytes.
+ipcMain.handle("input:fromPath", async (_e, { path: p }) => metaFor(p));
 
 ipcMain.handle("input:fromBytes", async (_e, { bytes, name }) => {
   await fs.mkdir(tmpDir(), { recursive: true });
@@ -79,17 +106,38 @@ ipcMain.handle("input:fromBytes", async (_e, { bytes, name }) => {
   const ext = path.extname(name) || ".png";
   const p = path.join(tmpDir(), `in-${id}${ext}`);
   await fs.writeFile(p, Buffer.from(bytes));
-  return { path: p, name, dataURL: await toDataURL(p) };
+  return metaFor(p);
 });
 
 // --- run -------------------------------------------------------------------
 
 ipcMain.handle("upscale:run", async (_e, { inputPath, quality }) => {
+  await fs.mkdir(tmpDir(), { recursive: true });
+  const id = crypto.randomUUID();
+
+  // ---- video: ffmpeg Lanczos + unsharp, keeps audio ----
+  if (video.isVideoPath(inputPath)) {
+    if (!video.hasFfmpeg()) {
+      throw new Error("Video needs ffmpeg. Install it with Homebrew: brew install ffmpeg, then reopen Upscalify.");
+    }
+    const outPath = path.join(tmpDir(), `out-${id}.mp4`);
+    const r = await video.run(inputPath, outPath, quality, (p) =>
+      win && win.webContents.send("upscale:progress", p),
+    );
+    return {
+      outputPath: outPath,
+      kind: "video",
+      dataURL: await toVideoDataURL(outPath),
+      scale: r.scale,
+      model: r.model,
+      elapsedMs: r.elapsedMs,
+    };
+  }
+
+  // ---- image: Real-ESRGAN ----
   const install = engine.findInstall();
   if (!install) throw new Error("Engine is not installed.");
-  await fs.mkdir(tmpDir(), { recursive: true });
-  const outPath = path.join(tmpDir(), `out-${crypto.randomUUID()}.png`);
-
+  const outPath = path.join(tmpDir(), `out-${id}.png`);
   const started = Date.now();
   const { scale, model } = await run(install, inputPath, outPath, quality, (frac) =>
     win && win.webContents.send("upscale:progress", { fraction: frac }),
@@ -97,6 +145,7 @@ ipcMain.handle("upscale:run", async (_e, { inputPath, quality }) => {
 
   return {
     outputPath: outPath,
+    kind: "image",
     dataURL: await toDataURL(outPath),
     scale,
     model,
@@ -106,10 +155,13 @@ ipcMain.handle("upscale:run", async (_e, { inputPath, quality }) => {
 
 // --- save ------------------------------------------------------------------
 
-ipcMain.handle("output:save", async (_e, { outputPath, suggestedName }) => {
+ipcMain.handle("output:save", async (_e, { outputPath, suggestedName, kind }) => {
+  const isVideo = kind === "video" || outputPath.toLowerCase().endsWith(".mp4");
   const res = await dialog.showSaveDialog(win, {
-    defaultPath: suggestedName || "upscaled.png",
-    filters: [{ name: "PNG image", extensions: ["png"] }],
+    defaultPath: suggestedName || (isVideo ? "upscaled.mp4" : "upscaled.png"),
+    filters: isVideo
+      ? [{ name: "MP4 video", extensions: ["mp4"] }]
+      : [{ name: "PNG image", extensions: ["png"] }],
   });
   if (res.canceled || !res.filePath) return { saved: false };
   await fs.copyFile(outputPath, res.filePath);

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; img-src 'self' data:; style-src 'self'; script-src 'self'"
+      content="default-src 'self'; img-src 'self' data:; media-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'self'"
     />
     <title>Upscalify</title>
     <link rel="stylesheet" href="styles.css" />
@@ -16,48 +16,59 @@
     <!-- First-run engine setup -->
     <section id="setup" class="screen hidden">
       <div class="setup-card">
-        <h1 class="wordmark">Upscalify<span>ai</span></h1>
-        <p class="muted">Setting up the upscaling engine — a one-time ~9&nbsp;MB download.</p>
+        <h1 class="wordmark">Upscalify <span>AI</span></h1>
+        <p class="muted">Setting up the upscaling engine. This one-time download is about 42&nbsp;MB, then it works offline.</p>
         <div class="bar"><div id="setup-bar" class="bar__fill"></div></div>
         <p id="setup-status" class="muted small">Starting…</p>
+        <p id="setup-detail" class="setup-detail muted small"></p>
       </div>
     </section>
 
     <!-- Main -->
     <main id="app" class="screen hidden">
       <header class="topbar">
-        <h1 class="wordmark small">Upscalify<span>ai</span></h1>
-        <div class="pills" id="pills">
-          <button class="pill is-active" data-quality="fast">Fast · 2×</button>
-          <button class="pill" data-quality="high">High quality · 4×</button>
-        </div>
+        <h1 class="wordmark small">Upscalify <span>AI</span></h1>
       </header>
 
-      <!-- Dropzone -->
-      <section id="dropzone" class="dropzone">
+      <!-- Dropzone (whole area is clickable) -->
+      <section id="dropzone" class="dropzone" role="button" tabindex="0" aria-label="Drop an image here or click to browse files">
         <div class="dropzone__inner">
           <div class="glyph">＋</div>
-          <p class="drop-title">Drop an image here</p>
-          <p class="muted small">or <button id="browse" class="link">browse your files</button></p>
-          <p class="muted small">JPG · PNG · WEBP · BMP · TIFF</p>
+          <p class="drop-title">Drop an image or video here</p>
+          <p class="muted small">or click to browse your files</p>
+          <p class="muted small">JPG · PNG · WEBP · MP4 · MOV · WEBM</p>
         </div>
       </section>
+
+      <!-- Quality pills (below the dropzone) -->
+      <div class="pills" id="pills">
+        <button class="pill is-active" data-quality="fast" title="Fast">2x</button>
+        <button class="pill" data-quality="high" title="High quality">4x</button>
+      </div>
 
       <!-- Working / result -->
       <section id="stage" class="stage hidden">
         <div class="compare" id="compare">
-          <img id="img-after" class="compare__img" alt="Upscaled result" />
-          <div class="compare__before" id="clip">
-            <img id="img-before" class="compare__img" alt="Original" />
+          <img id="img-before" class="compare__img" alt="Original" />
+          <div class="compare__reveal" id="clip">
+            <img id="img-after" class="compare__img" alt="Upscaled result" />
           </div>
           <div class="compare__handle" id="handle"><span></span></div>
-          <div class="compare__tag compare__tag--before">Before</div>
-          <div class="compare__tag compare__tag--after">After</div>
+          <div class="compare__tag compare__tag--left">After</div>
+          <div class="compare__tag compare__tag--right">Before</div>
+          <div class="compare__loading">
+            <span id="loading-label" class="compare__loading-pill">Reconstructing</span>
+          </div>
         </div>
 
-        <div id="progress" class="progress hidden">
-          <div class="bar"><div id="work-bar" class="bar__fill"></div></div>
-          <p id="work-status" class="muted small">Reconstructing…</p>
+        <!-- Video result -->
+        <div class="videobox hidden" id="videobox">
+          <div class="videobox__frame is-loading" id="videoframe">
+            <video id="result-video" class="result-video" controls playsinline></video>
+            <div class="videobox__loading">
+              <span id="vloading-label" class="compare__loading-pill">Reconstructing</span>
+            </div>
+          </div>
         </div>
 
         <div class="actions">
@@ -68,8 +79,6 @@
           </div>
         </div>
       </section>
-
-      <footer class="foot muted small">Runs on your machine. Nothing leaves it.</footer>
     </main>
 
     <script src="renderer.js"></script>

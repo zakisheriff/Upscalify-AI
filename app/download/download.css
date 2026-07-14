@@ -1,0 +1,168 @@
+/* ============================================================
+   Upscalify AI — download landing. Light, monochrome, quiet.
+   Scoped under .dl so it overrides the dark app globals for
+   this route only.
+   ============================================================ */
+
+.dl {
+  --dl-bg: #ffffff;
+  --dl-ink: #111111;
+  --dl-ink-2: #5b5b5b;
+  --dl-ink-3: #8a8a8a;
+  --dl-line: #e6e6e6;
+  --dl-line-2: #d6d6d6;
+  --dl-soft: #f6f6f6;
+  --dl-radius: 14px;
+  --dl-radius-lg: 28px;
+  --dl-font: -apple-system, BlinkMacSystemFont, "Helvetica Neue", var(--font-ui), "Segoe UI", Roboto, sans-serif;
+
+  color-scheme: light;
+  position: relative;
+  min-height: 100dvh;
+  background: var(--dl-bg);
+  color: var(--dl-ink);
+  font-family: var(--dl-font);
+  font-size: 16px;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.dl a { color: inherit; }
+
+.dl-wrap {
+  width: 100%;
+  max-width: 940px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---- top bar ---- */
+.dl-top {
+  position: sticky; top: 0; z-index: 20;
+  background: rgba(255, 255, 255, 0.82);
+  backdrop-filter: saturate(1.1) blur(14px);
+  -webkit-backdrop-filter: saturate(1.1) blur(14px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.25s ease;
+}
+.dl-top.is-stuck { border-bottom-color: var(--dl-line); }
+.dl-top__inner {
+  height: 64px; display: flex; align-items: center; justify-content: space-between;
+}
+.dl-brand {
+  font-family: var(--font-dot), var(--dl-font);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 18px;
+  text-decoration: none;
+}
+.dl-top__links { display: flex; align-items: center; gap: 22px; }
+.dl-top__link {
+  font-size: 15px; color: var(--dl-ink-2); text-decoration: none;
+  transition: color 0.2s ease;
+}
+.dl-top__link:hover { color: var(--dl-ink); }
+
+/* ---- buttons ---- */
+.dl-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 16px; font-weight: 500; line-height: 1;
+  padding: 14px 26px; border-radius: 999px;
+  text-decoration: none; cursor: pointer; border: 1px solid transparent;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+.dl-btn--primary { background: var(--dl-ink); color: #fff; }
+.dl-btn--primary:hover { background: #000; }
+.dl-btn--ghost { background: transparent; color: var(--dl-ink); border-color: var(--dl-line-2); }
+.dl-btn--ghost:hover { background: var(--dl-soft); }
+.dl-btn--sm { padding: 10px 18px; font-size: 15px; }
+
+/* ---- hero ---- */
+.dl-hero { padding: 96px 0 72px; text-align: center; }
+.dl-hero__mark {
+  font-family: var(--font-dot), var(--dl-font);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  font-size: clamp(2.4rem, 7vw, 4rem);
+  line-height: 1;
+  margin: 0 0 28px;
+}
+.dl-hero__mark span { color: var(--dl-ink); }
+.dl-hero__head {
+  font-size: clamp(1.9rem, 4.6vw, 3rem);
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.08;
+  margin: 0 auto 20px;
+  max-width: 16ch;
+}
+.dl-hero__sub {
+  font-size: clamp(1.05rem, 2vw, 1.2rem);
+  color: var(--dl-ink-2);
+  max-width: 52ch;
+  margin: 0 auto 36px;
+}
+.dl-hero__cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.dl-hero__note { margin: 20px 0 0; font-size: 14px; color: var(--dl-ink-3); }
+
+/* ---- preview frame ---- */
+.dl-shot {
+  margin: 56px auto 0;
+  max-width: 860px;
+  border: 1px solid var(--dl-line);
+  border-radius: var(--dl-radius-lg);
+  overflow: hidden;
+  background: var(--dl-soft);
+}
+.dl-shot img { display: block; width: 100%; height: auto; }
+
+/* ---- sections ---- */
+.dl-section { padding: 72px 0; border-top: 1px solid var(--dl-line); }
+.dl-section__head {
+  font-size: clamp(1.5rem, 3.2vw, 2rem);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  margin: 0 0 16px;
+}
+.dl-section__lead {
+  font-size: 1.1rem; color: var(--dl-ink-2); max-width: 56ch; margin: 0 0 40px;
+}
+
+/* value grid (no icons, no bullets) */
+.dl-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px 32px; }
+.dl-cell__title { font-size: 1.15rem; font-weight: 600; margin: 0 0 8px; }
+.dl-cell__body { font-size: 1rem; color: var(--dl-ink-2); margin: 0; }
+
+/* install prose */
+.dl-steps { display: flex; flex-direction: column; gap: 20px; max-width: 60ch; }
+.dl-step__title { font-size: 1.1rem; font-weight: 600; margin: 0 0 4px; }
+.dl-step__body { font-size: 1rem; color: var(--dl-ink-2); margin: 0; }
+.dl-install__cta { margin-top: 40px; }
+
+/* ---- footer ---- */
+.dl-foot {
+  border-top: 1px solid var(--dl-line);
+  padding: 40px 0 64px;
+  color: var(--dl-ink-3); font-size: 15px;
+}
+.dl-foot__inner {
+  display: flex; align-items: center; justify-content: space-between; gap: 16px;
+  flex-wrap: wrap;
+}
+.dl-foot a { color: var(--dl-ink-2); text-decoration: none; }
+.dl-foot a:hover { color: var(--dl-ink); }
+.dl-foot__links { display: flex; gap: 22px; }
+
+/* reveal (GSAP toggles inline styles; keep a sane default) */
+.dl-reveal { will-change: transform, opacity; }
+
+@media (max-width: 720px) {
+  .dl-grid { grid-template-columns: 1fr; gap: 32px; }
+  .dl-hero { padding: 72px 0 56px; }
+  .dl-top__links .dl-top__link { display: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dl-top, .dl-btn, .dl-top__link { transition: none; }
+}

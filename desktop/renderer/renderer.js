@@ -18,15 +18,17 @@ async function boot() {
   }
   show("setup");
   window.api.onEngineProgress((p) => {
-    const pct = Math.round(p.fraction * 100);
-    if (p.phase === "engine") {
-      $("setup-bar").style.width = `${pct}%`;
-      $("setup-status").textContent = `Downloading engine… ${pct}%`;
-    } else if (p.phase === "extract") {
-      $("setup-status").textContent = "Unpacking…";
-    } else if (p.phase === "models") {
-      $("setup-bar").style.width = `${pct}%`;
-      $("setup-status").textContent = `Downloading models… ${pct}%`;
+    const pct = Math.round((p.fraction || 0) * 100);
+    $("setup-bar").style.width = `${pct}%`;
+    if (p.phase === "extract") {
+      $("setup-status").textContent = "Unpacking the engine…";
+      $("setup-detail").textContent = "";
+    } else if (p.phase === "done") {
+      $("setup-status").textContent = "Finishing up…";
+      $("setup-detail").textContent = "";
+    } else {
+      $("setup-status").textContent = `Downloading the model · ${pct}%`;
+      $("setup-detail").textContent = fmtDetail(p);
     }
   });
   try {
@@ -41,6 +43,28 @@ function show(which) {
   for (const s of ["setup", "app"]) $(s).classList.toggle("hidden", s !== which);
 }
 
+// --- download detail formatting --------------------------------------------
+
+const MB = 1024 * 1024;
+const fmtMB = (b) => `${(b / MB).toFixed(1)} MB`;
+const fmtSpeed = (bps) => (bps ? `${(bps / MB).toFixed(1)} MB/s` : "");
+function fmtEta(sec) {
+  if (!sec || !isFinite(sec)) return "";
+  sec = Math.round(sec);
+  if (sec < 60) return `about ${sec}s left`;
+  const m = Math.floor(sec / 60);
+  return `about ${m}m ${sec % 60}s left`;
+}
+function fmtDetail(p) {
+  const parts = [];
+  if (p.totalBytes) parts.push(`${fmtMB(p.receivedBytes || 0)} of ${fmtMB(p.totalBytes)}`);
+  const sp = fmtSpeed(p.bytesPerSec);
+  if (sp) parts.push(sp);
+  const eta = fmtEta(p.etaSec);
+  if (eta) parts.push(eta);
+  return parts.join("  ·  ");
+}
+
 // --- quality pills ---------------------------------------------------------
 
 $("pills").addEventListener("click", (e) => {
@@ -52,12 +76,20 @@ $("pills").addEventListener("click", (e) => {
 
 // --- input: browse + drag/drop ---------------------------------------------
 
-$("browse").addEventListener("click", async () => {
+const dz = $("dropzone");
+
+// The whole dropzone opens the file picker.
+async function openPicker() {
   const res = await window.api.pickInput();
   if (res) loadInput(res);
+}
+dz.addEventListener("click", openPicker);
+dz.addEventListener("keydown", (e) => {
+  if (e.key === "Enter" || e.key === " ") {
+    e.preventDefault();
+    openPicker();
+  }
 });
-
-const dz = $("dropzone");
 ["dragenter", "dragover"].forEach((ev) =>
   dz.addEventListener(ev, (e) => {
     e.preventDefault();
@@ -72,79 +104,149 @@ const dz = $("dropzone");
 );
 dz.addEventListener("drop", async (e) => {
   const file = e.dataTransfer.files[0];
-  if (!file || !file.type.startsWith("image/")) return;
-  const bytes = new Uint8Array(await file.arrayBuffer());
-  const res = await window.api.inputFromBytes(bytes, file.name);
+  if (!file) return;
+  const isMedia = file.type.startsWith("image/") || file.type.startsWith("video/");
+  if (!isMedia) return;
+  // Prefer the real path (no byte copy — important for large videos).
+  const p = window.api.pathForFile(file);
+  const res = p
+    ? await window.api.inputFromPath(p)
+    : await window.api.inputFromBytes(new Uint8Array(await file.arrayBuffer()), file.name);
   loadInput(res);
 });
 
 // --- run -------------------------------------------------------------------
 
-async function loadInput(input) {
+// Single progress dispatcher: whichever mode is active sets `onProgress`.
+let onProgress = () => {};
+window.api.onUpscaleProgress((p) => onProgress(p));
+
+function loadInput(input) {
   state.input = input;
   state.output = null;
   $("dropzone").classList.add("hidden");
+  $("pills").classList.add("hidden");
   $("stage").classList.remove("hidden");
-  $("img-before").src = input.dataURL;
-  $("img-after").src = input.dataURL; // shown until the result arrives
   $("save").disabled = true;
   $("meta").textContent = input.name;
+  if (input.kind === "video") return loadVideo(input);
+  return loadImage(input);
+}
 
-  // start reconstruction
-  $("progress").classList.remove("hidden");
-  const bar = $("work-bar");
-  bar.classList.add("indeterminate");
-  $("work-status").textContent = "Reconstructing…";
+async function loadImage(input) {
+  $("videobox").classList.add("hidden");
+  $("compare").classList.remove("hidden");
+  $("img-before").onload = fitCompare; // size the frame as soon as the image is known
+  $("img-before").src = input.dataURL;
+  $("img-after").src = input.dataURL; // shown, dimmed, while reconstructing
 
-  window.api.onUpscaleProgress(({ fraction }) => {
-    bar.classList.remove("indeterminate");
-    bar.style.width = `${Math.round(fraction * 100)}%`;
-    $("work-status").textContent = `Reconstructing… ${Math.round(fraction * 100)}%`;
-  });
+  const compare = $("compare");
+  const label = $("loading-label");
+  compare.classList.remove("is-error");
+  compare.classList.add("is-loading");
+  label.textContent = "Reconstructing";
+  onProgress = ({ fraction }) => {
+    const pct = Math.round((fraction || 0) * 100);
+    label.textContent = pct >= 99 ? "Finishing…" : `Reconstructing ${pct}%`;
+  };
 
   try {
     const out = await window.api.upscale(input.path, state.quality);
     state.output = out;
     $("img-after").src = out.dataURL;
+    compare.classList.remove("is-loading");
     $("save").disabled = false;
-    $("progress").classList.add("hidden");
     $("meta").textContent = `${input.name} · ${out.model} · ${(out.elapsedMs / 1000).toFixed(1)}s`;
     setupCompare();
   } catch (err) {
-    $("work-status").textContent = `Failed: ${err.message}`;
-    bar.classList.remove("indeterminate");
+    compare.classList.add("is-error");
+    label.textContent = `Failed: ${err.message}`;
+  }
+}
+
+async function loadVideo(input) {
+  $("compare").classList.add("hidden");
+  $("videobox").classList.remove("hidden");
+  const frame = $("videoframe");
+  const label = $("vloading-label");
+  frame.classList.add("is-loading");
+  label.textContent = "Reconstructing";
+  onProgress = (p) => {
+    label.textContent = p.detail
+      ? `Reconstructing ${p.detail}`
+      : `Reconstructing ${Math.round((p.fraction || 0) * 100)}%`;
+  };
+
+  try {
+    const out = await window.api.upscale(input.path, state.quality);
+    state.output = out;
+    const v = $("result-video");
+    v.src = out.dataURL;
+    frame.classList.remove("is-loading");
+    $("save").disabled = false;
+    $("meta").textContent = `${input.name} · ${out.model} · ${(out.elapsedMs / 1000).toFixed(1)}s`;
+  } catch (err) {
+    label.textContent = `Failed: ${err.message}`;
   }
 }
 
 $("reset").addEventListener("click", () => {
   state.input = null;
   state.output = null;
+  onProgress = () => {};
+  $("compare").classList.remove("is-loading", "is-error");
+  const v = $("result-video");
+  v.pause();
+  v.removeAttribute("src");
+  v.load();
   $("stage").classList.add("hidden");
+  $("pills").classList.remove("hidden");
   $("dropzone").classList.remove("hidden");
 });
 
 $("save").addEventListener("click", async () => {
   if (!state.output) return;
-  const base = (state.input.name || "image").replace(/\.[^.]+$/, "");
-  await window.api.save(state.output.outputPath, `${base}-upscaled.png`);
+  const isVideo = state.output.kind === "video";
+  const base = (state.input.name || "file").replace(/\.[^.]+$/, "");
+  const suggested = `${base}-upscaled.${isVideo ? "mp4" : "png"}`;
+  await window.api.save(state.output.outputPath, suggested, state.output.kind);
 });
 
 // --- before/after slider ---------------------------------------------------
+
+let comparePos = 50;
+
+// Size the frame to the fitted image so both layers share exact geometry.
+function fitCompare() {
+  const compare = $("compare");
+  const base = $("img-before");
+  const w0 = base.naturalWidth, h0 = base.naturalHeight;
+  if (!w0 || !h0) return;
+  const maxW = compare.parentElement.clientWidth;
+  const maxH = Math.round(window.innerHeight * 0.6);
+  const s = Math.min(maxW / w0, maxH / h0);
+  const w = Math.round(w0 * s), h = Math.round(h0 * s);
+  compare.style.width = `${w}px`;
+  compare.style.height = `${h}px`;
+  // the "after" image inside the clip must stay the full frame width
+  $("img-after").style.width = `${w}px`;
+  $("img-after").style.height = `${h}px`;
+}
 
 function setupCompare() {
   const compare = $("compare");
   const clip = $("clip");
   const handle = $("handle");
-  const before = $("img-before");
+
+  fitCompare();
 
   const setPos = (pct) => {
-    pct = Math.max(0, Math.min(100, pct));
-    clip.style.width = `${pct}%`;
-    handle.style.left = `${pct}%`;
-    // keep the "before" image aligned to the full frame width
-    before.style.width = `${compare.clientWidth}px`;
+    comparePos = Math.max(0, Math.min(100, pct));
+    // left of the handle = after (revealed), so sliding right shows more after
+    clip.style.width = `${comparePos}%`;
+    handle.style.left = `${comparePos}%`;
   };
-  setPos(50);
+  setPos(comparePos);
 
   let dragging = false;
   const move = (clientX) => {
@@ -155,7 +257,10 @@ function setupCompare() {
   window.addEventListener("mouseup", () => (dragging = false));
   window.addEventListener("mousemove", (e) => dragging && move(e.clientX));
   compare.addEventListener("click", (e) => move(e.clientX));
-  window.addEventListener("resize", () => (before.style.width = `${compare.clientWidth}px`));
+  window.addEventListener("resize", () => {
+    fitCompare();
+    setPos(comparePos);
+  });
 }
 
 boot();
