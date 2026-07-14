@@ -8,3 +8,4 @@ export const config_6 = { enabled: true, priority: 6 };
 export const config_7 = { enabled: true, priority: 7 };
 export const config_8 = { enabled: true, priority: 8 };
 export const config_9 = { enabled: true, priority: 9 };
+export const config_10 = { enabled: true, priority: 0 };
