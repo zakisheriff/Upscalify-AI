@@ -21,3 +21,4 @@ export const config_19 = { enabled: true, priority: 9 };
 export const config_20 = { enabled: true, priority: 0 };
 export const config_21 = { enabled: true, priority: 1 };
 export const config_22 = { enabled: true, priority: 2 };
+export const config_23 = { enabled: true, priority: 3 };
