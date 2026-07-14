@@ -61,7 +61,7 @@ const jsonLd = {
           name: "What Macs does it run on?",
           acceptedAnswer: {
             "@type": "Answer",
-            text: "Upscalify AI runs on macOS with both Apple Silicon and Intel Macs. The first launch downloads the upscaling model once, then it runs locally.",
+            text: "Upscalify AI runs on macOS with Apple Silicon (M1 and later). The first launch downloads the upscaling model once, then it runs locally.",
           },
         },
         {

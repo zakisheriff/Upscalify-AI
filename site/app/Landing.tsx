@@ -98,7 +98,7 @@ export function Landing() {
               <a className="btn btn--ghost" href={REPO} rel="noopener">View on GitHub</a>
             </motion.div>
             <motion.p className="hero__note" custom={4} variants={item} initial="hidden" animate="show">
-              Free and open source. macOS, Apple Silicon or Intel.
+              Free and open source. Requires an Apple Silicon Mac (M1 or later).
             </motion.p>
           </div>
         </section>
