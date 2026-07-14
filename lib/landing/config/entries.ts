@@ -38,3 +38,4 @@ export const config_36 = { enabled: true, priority: 6 };
 export const config_37 = { enabled: true, priority: 7 };
 export const config_38 = { enabled: true, priority: 8 };
 export const config_39 = { enabled: true, priority: 9 };
+export const config_40 = { enabled: true, priority: 0 };
