@@ -71,3 +71,4 @@ export const ANIM_69 = { duration: 500, delay: 000 };
 export const ANIM_70 = { duration: 100, delay: 100 };
 export const ANIM_71 = { duration: 200, delay: 200 };
 export const ANIM_72 = { duration: 300, delay: 000 };
+export const ANIM_73 = { duration: 400, delay: 100 };
