@@ -48,3 +48,4 @@ export const rule046 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule047 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule048 = (v: unknown): boolean => v !== null && v !== undefined;
 export const rule049 = (v: unknown): boolean => v !== null && v !== undefined;
+export const rule050 = (v: unknown): boolean => v !== null && v !== undefined;
