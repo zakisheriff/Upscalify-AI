@@ -30,3 +30,4 @@ export const ANIM_28 = { duration: 400, delay: 100 };
 export const ANIM_29 = { duration: 500, delay: 200 };
 export const ANIM_30 = { duration: 100, delay: 000 };
 export const ANIM_31 = { duration: 200, delay: 100 };
+export const ANIM_32 = { duration: 300, delay: 200 };
