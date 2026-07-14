@@ -50,6 +50,7 @@ button, .link { -webkit-app-region: no-drag; }
 /* Center the whole app vertically in the window */
 #app {
   min-height: calc(100vh - 28px - 24px);
+  max-width: 880px; margin: 0 auto;
   display: flex; flex-direction: column; justify-content: center;
 }
 
@@ -83,8 +84,9 @@ button, .link { -webkit-app-region: no-drag; }
   font-size: 15px; font-weight: 500; letter-spacing: 0.01em;
   cursor: pointer; transition: all 0.15s;
 }
-.pill:hover { background: var(--hover); color: var(--text); }
+.pill:hover:not(.is-active) { background: var(--hover); color: var(--text); }
 .pill.is-active { background: var(--ink); border-color: var(--ink); color: #fff; }
+.pill.is-active:hover { background: var(--ink-hover); color: #fff; }
 
 /* Dropzone */
 .dropzone {
@@ -112,7 +114,7 @@ button, .link { -webkit-app-region: no-drag; }
 .stage { display: flex; flex-direction: column; gap: 16px; }
 .compare {
   position: relative; width: 100%; max-height: 56vh; overflow: hidden;
-  border-radius: var(--radius); background: #f2f2f2; border: 1px solid var(--border);
+  border-radius: 20px; background: var(--bg); border: 1px solid var(--border);
   display: flex; align-items: center; justify-content: center;
 }
 .compare__img { width: 100%; height: auto; max-height: 56vh; object-fit: contain; display: block; }
@@ -148,13 +150,13 @@ button, .link { -webkit-app-region: no-drag; }
 .actions__buttons { display: flex; gap: 10px; }
 .btn {
   border: none; background: var(--ink); color: #fff;
-  padding: 10px 20px; border-radius: var(--radius); font-size: 14px; cursor: pointer;
-  transition: background 0.15s;
+  padding: 11px 22px; border-radius: var(--radius-pill); font-size: 14px; font-weight: 500;
+  cursor: pointer; transition: background 0.15s, color 0.15s;
 }
-.btn:hover:not(:disabled) { background: var(--ink-hover); }
+.btn:hover:not(:disabled) { background: var(--ink-hover); color: #fff; }
 .btn:disabled { opacity: 0.35; cursor: default; }
 .btn--ghost { background: var(--panel); border: 1px solid var(--border-strong); color: var(--text); }
-.btn--ghost:hover { background: var(--hover); }
+.btn--ghost:hover:not(:disabled) { background: var(--hover); color: var(--text); }
 
 .foot { text-align: center; padding-top: 18px; }
 
