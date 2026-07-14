@@ -18,15 +18,17 @@ async function boot() {
   }
   show("setup");
   window.api.onEngineProgress((p) => {
-    const pct = Math.round(p.fraction * 100);
-    if (p.phase === "engine") {
-      $("setup-bar").style.width = `${pct}%`;
-      $("setup-status").textContent = `Downloading engine… ${pct}%`;
-    } else if (p.phase === "extract") {
-      $("setup-status").textContent = "Unpacking…";
-    } else if (p.phase === "models") {
-      $("setup-bar").style.width = `${pct}%`;
-      $("setup-status").textContent = `Downloading models… ${pct}%`;
+    const pct = Math.round((p.fraction || 0) * 100);
+    $("setup-bar").style.width = `${pct}%`;
+    if (p.phase === "extract") {
+      $("setup-status").textContent = "Unpacking the engine…";
+      $("setup-detail").textContent = "";
+    } else if (p.phase === "done") {
+      $("setup-status").textContent = "Finishing up…";
+      $("setup-detail").textContent = "";
+    } else {
+      $("setup-status").textContent = `Downloading the model · ${pct}%`;
+      $("setup-detail").textContent = fmtDetail(p);
     }
   });
   try {
@@ -39,6 +41,28 @@ async function boot() {
 
 function show(which) {
   for (const s of ["setup", "app"]) $(s).classList.toggle("hidden", s !== which);
+}
+
+// --- download detail formatting --------------------------------------------
+
+const MB = 1024 * 1024;
+const fmtMB = (b) => `${(b / MB).toFixed(1)} MB`;
+const fmtSpeed = (bps) => (bps ? `${(bps / MB).toFixed(1)} MB/s` : "");
+function fmtEta(sec) {
+  if (!sec || !isFinite(sec)) return "";
+  sec = Math.round(sec);
+  if (sec < 60) return `about ${sec}s left`;
+  const m = Math.floor(sec / 60);
+  return `about ${m}m ${sec % 60}s left`;
+}
+function fmtDetail(p) {
+  const parts = [];
+  if (p.totalBytes) parts.push(`${fmtMB(p.receivedBytes || 0)} of ${fmtMB(p.totalBytes)}`);
+  const sp = fmtSpeed(p.bytesPerSec);
+  if (sp) parts.push(sp);
+  const eta = fmtEta(p.etaSec);
+  if (eta) parts.push(eta);
+  return parts.join("  ·  ");
 }
 
 // --- quality pills ---------------------------------------------------------
@@ -94,6 +118,7 @@ async function loadInput(input) {
   $("dropzone").classList.add("hidden");
   $("pills").classList.add("hidden");
   $("stage").classList.remove("hidden");
+  $("img-before").onload = fitCompare; // size the frame as soon as the image is known
   $("img-before").src = input.dataURL;
   $("img-after").src = input.dataURL; // shown, dimmed, while reconstructing
   $("save").disabled = true;
@@ -141,20 +166,39 @@ $("save").addEventListener("click", async () => {
 
 // --- before/after slider ---------------------------------------------------
 
+let comparePos = 50;
+
+// Size the frame to the fitted image so both layers share exact geometry.
+function fitCompare() {
+  const compare = $("compare");
+  const base = $("img-before");
+  const w0 = base.naturalWidth, h0 = base.naturalHeight;
+  if (!w0 || !h0) return;
+  const maxW = compare.parentElement.clientWidth;
+  const maxH = Math.round(window.innerHeight * 0.6);
+  const s = Math.min(maxW / w0, maxH / h0);
+  const w = Math.round(w0 * s), h = Math.round(h0 * s);
+  compare.style.width = `${w}px`;
+  compare.style.height = `${h}px`;
+  // the "after" image inside the clip must stay the full frame width
+  $("img-after").style.width = `${w}px`;
+  $("img-after").style.height = `${h}px`;
+}
+
 function setupCompare() {
   const compare = $("compare");
   const clip = $("clip");
   const handle = $("handle");
-  const before = $("img-before");
+
+  fitCompare();
 
   const setPos = (pct) => {
-    pct = Math.max(0, Math.min(100, pct));
-    clip.style.width = `${pct}%`;
-    handle.style.left = `${pct}%`;
-    // keep the "before" image aligned to the full frame width
-    before.style.width = `${compare.clientWidth}px`;
+    comparePos = Math.max(0, Math.min(100, pct));
+    // left of the handle = after (revealed), so sliding right shows more after
+    clip.style.width = `${comparePos}%`;
+    handle.style.left = `${comparePos}%`;
   };
-  setPos(50);
+  setPos(comparePos);
 
   let dragging = false;
   const move = (clientX) => {
@@ -165,7 +209,10 @@ function setupCompare() {
   window.addEventListener("mouseup", () => (dragging = false));
   window.addEventListener("mousemove", (e) => dragging && move(e.clientX));
   compare.addEventListener("click", (e) => move(e.clientX));
-  window.addEventListener("resize", () => (before.style.width = `${compare.clientWidth}px`));
+  window.addEventListener("resize", () => {
+    fitCompare();
+    setPos(comparePos);
+  });
 }
 
 boot();

@@ -60,7 +60,7 @@ function isInstalled() {
   return findInstall() !== null;
 }
 
-function download(url, dest, onProgress) {
+function download(url, dest, onChunk) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
     const get = (u) => {
@@ -71,12 +71,7 @@ function download(url, dest, onProgress) {
             return get(res.headers.location); // follow GitHub → CDN redirect
           }
           if (res.statusCode !== 200) return reject(new Error(`Download failed (${res.statusCode})`));
-          const total = Number(res.headers["content-length"]) || 0;
-          let received = 0;
-          res.on("data", (c) => {
-            received += c.length;
-            if (onProgress && total) onProgress(received / total);
-          });
+          res.on("data", (c) => onChunk?.(c.length));
           res.pipe(file);
           file.on("finish", () => file.close(() => resolve()));
         })
@@ -97,24 +92,56 @@ function unquarantine(dir) {
   return new Promise((resolve) => execFile("/usr/bin/xattr", ["-dr", "com.apple.quarantine", dir], () => resolve()));
 }
 
+// Approximate total of everything fetched (binary zip ~5.5 MB + weights ~36 MB).
+// Used for the overall bar and ETA; the final tick is pinned to 100% on success.
+const ESTIMATED_TOTAL = 42 * 1024 * 1024;
+
 async function install(onProgress) {
   const root = engineDir();
   await fsp.mkdir(root, { recursive: true });
   await fsp.mkdir(modelsDir(), { recursive: true });
 
+  // Shared byte/speed tracker across the binary + all model files, so the user
+  // sees one continuous "downloaded / total · speed · time left".
+  let received = 0;
+  let winBytes = 0;
+  let winStart = Date.now();
+  let bytesPerSec = 0;
+  const tick = (phase) => {
+    const now = Date.now();
+    const dt = (now - winStart) / 1000;
+    if (dt >= 0.4) {
+      bytesPerSec = winBytes / dt;
+      winBytes = 0;
+      winStart = now;
+    }
+    const remaining = Math.max(0, ESTIMATED_TOTAL - received);
+    const etaSec = bytesPerSec > 0 ? remaining / bytesPerSec : 0;
+    onProgress?.({
+      phase,
+      receivedBytes: received,
+      totalBytes: ESTIMATED_TOTAL,
+      bytesPerSec,
+      etaSec,
+      fraction: Math.min(0.999, received / ESTIMATED_TOTAL),
+    });
+  };
+  const chunk = (phase) => (len) => {
+    received += len;
+    winBytes += len;
+    tick(phase);
+  };
+
   // 1. binary
   const zipPath = path.join(root, "engine.zip");
-  await download(BINARY_ZIP, zipPath, (f) => onProgress?.({ phase: "engine", fraction: f }));
-  onProgress?.({ phase: "extract", fraction: 1 });
+  await download(BINARY_ZIP, zipPath, chunk("download"));
+  onProgress?.({ phase: "extract", fraction: received / ESTIMATED_TOTAL, receivedBytes: received, totalBytes: ESTIMATED_TOTAL });
   await unzip(zipPath, root);
   await fsp.unlink(zipPath).catch(() => {});
 
   // 2. models
-  for (let i = 0; i < MODEL_FILES.length; i++) {
-    const name = MODEL_FILES[i];
-    await download(`${MODEL_BASE}/${name}`, path.join(modelsDir(), name), (f) =>
-      onProgress?.({ phase: "models", fraction: (i + f) / MODEL_FILES.length }),
-    );
+  for (const name of MODEL_FILES) {
+    await download(`${MODEL_BASE}/${name}`, path.join(modelsDir(), name), chunk("download"));
   }
 
   // 3. make the downloaded binary runnable
@@ -122,6 +149,7 @@ async function install(onProgress) {
   if (!found) throw new Error("Engine did not install correctly.");
   await fsp.chmod(found.bin, 0o755).catch(() => {});
   await unquarantine(root);
+  onProgress?.({ phase: "done", fraction: 1, receivedBytes: ESTIMATED_TOTAL, totalBytes: ESTIMATED_TOTAL, bytesPerSec: 0, etaSec: 0 });
   return found;
 }
 

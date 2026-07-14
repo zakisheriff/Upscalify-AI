@@ -71,6 +71,9 @@ button, .link { -webkit-app-region: no-drag; }
 #setup { display: flex; align-items: center; justify-content: center; min-height: 90vh; }
 .setup-card { width: 420px; max-width: 90vw; text-align: center; }
 .setup-card h1 { font-size: 44px; margin-bottom: 20px; }
+.setup-card .bar { margin-top: 22px; }
+.setup-card #setup-status { margin-bottom: 4px; }
+.setup-detail { font-variant-numeric: tabular-nums; color: var(--text-disabled); min-height: 1.2em; }
 
 /* Topbar */
 .topbar {
@@ -113,17 +116,21 @@ button, .link { -webkit-app-region: no-drag; }
 /* Stage */
 .stage { display: flex; flex-direction: column; gap: 16px; }
 .compare {
-  position: relative; width: 100%; max-height: 56vh; overflow: hidden;
+  position: relative; margin: 0 auto; max-width: 100%; overflow: hidden;
   border-radius: 20px; background: var(--bg); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
 }
-.compare__img { width: 100%; height: auto; max-height: 56vh; object-fit: contain; display: block; }
-.compare__before {
-  position: absolute; inset: 0; width: 50%; overflow: hidden; border-right: 2px solid var(--ink);
+/* base layer = "before"; the container is sized to the image (JS), so both
+   layers share identical geometry and the reveal is pixel-perfect. */
+.compare__img {
+  position: absolute; top: 0; left: 0;
+  width: 100%; height: 100%; object-fit: cover; display: block;
 }
-.compare__before .compare__img {
-  position: absolute; top: 0; left: 0; height: 100%; width: auto; max-width: none;
+/* reveal layer = "after", clipped from the left; widens as you slide right */
+.compare__reveal {
+  position: absolute; top: 0; left: 0; height: 100%; width: 50%;
+  overflow: hidden; border-right: 2px solid var(--ink);
 }
+.compare__reveal .compare__img { width: 100%; } /* JS sets px width = frame width */
 .compare__handle {
   position: absolute; top: 0; bottom: 0; left: 50%; width: 40px; margin-left: -20px;
   cursor: ew-resize; display: flex; align-items: center; justify-content: center;
@@ -136,11 +143,11 @@ button, .link { -webkit-app-region: no-drag; }
   position: absolute; top: 10px; padding: 3px 8px; border-radius: 4px;
   font-size: 11px; background: rgba(17,17,17,0.72); color: #fff; pointer-events: none;
 }
-.compare__tag--before { left: 10px; }
-.compare__tag--after { right: 10px; }
+.compare__tag--left { left: 10px; }
+.compare__tag--right { right: 10px; }
 
 /* ---- loading state (while reconstructing) ---- */
-.compare.is-loading .compare__before,
+.compare.is-loading .compare__reveal,
 .compare.is-loading .compare__handle,
 .compare.is-loading .compare__tag { display: none; }
 
